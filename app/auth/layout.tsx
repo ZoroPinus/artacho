@@ -1,16 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 
-const AuthLayout = ({ 
-  children
-}: { 
-  children: React.ReactNode
-}) => {
-  return ( 
-<div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+const AuthLayout = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div className="relative h-screen flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
         <div className="absolute inset-0 bg-zinc-900" />
         <div className="relative z-20 flex items-center text-lg font-medium">
-          <svg
+          {/* <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="none"
@@ -21,8 +18,13 @@ const AuthLayout = ({
             className="mr-2 h-6 w-6"
           >
             <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
-          </svg>
-          Logo
+          </svg> */}
+          <Image
+            width={20}
+            height={20}
+            alt="Website logo"
+            src="https://utfs.io/f/d3fdfc03-cf46-467b-86e5-613e6a6e7acf-2a.png"
+          />
         </div>
       </div>
       <div className="p-4 lg:p-8 h-full flex items-center">
@@ -60,7 +62,7 @@ const AuthLayout = ({
     // <div className="h-full flex items-center justify-center bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-sky-400 to-blue-800">
     //   {children}
     // </div>
-   );
-}
- 
+  );
+};
+
 export default AuthLayout;
