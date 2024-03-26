@@ -1,7 +1,4 @@
 "use client";
-import { Overview } from "@/components/overview";
-import { RecentSales } from "@/components/recent-sales";
-import { Link } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { DocumentClient } from "@/components/tables/document-tables/client";
@@ -9,7 +6,6 @@ import { UserClient } from "@/components/tables/user-tables/client";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -19,12 +15,11 @@ import { Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 // import axios from "axios";
 import { useEffect, useState } from "react";
-import { getAllMembers, getUserByEmail } from "@/data/user";
 import { members } from "@/actions/members";
 import { documents } from "@/actions/document";
 import { User } from "@/types";
 import { Document } from "@/constants/data";
-export default function page() {
+const DashboardPage = () => {
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -50,7 +45,7 @@ export default function page() {
   useEffect(() => {
     fetchDocuments()
     fetchMembers();
-  }, [members]);
+  }, []);
 
 
   return (
@@ -270,3 +265,4 @@ export default function page() {
     </ScrollArea>
   );
 }
+export default DashboardPage;

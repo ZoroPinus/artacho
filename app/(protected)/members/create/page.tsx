@@ -15,7 +15,7 @@ import { MemberRegisterSchema } from "@/schemas";
 import { registerMember } from "@/actions/registerMember";
 import { useSearchParams } from "next/navigation";
 
-export default function Page() {
+export default function UserCreatePage() {
   const breadcrumbItems = [
     { title: "Member", link: "/dashboard/members" },
     { title: "Create", link: "/dashboard/members/create" },

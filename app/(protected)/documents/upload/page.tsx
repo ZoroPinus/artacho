@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 
 
-export default function Page() {
+export default function DocumentUploadPage() {
   const breadcrumbItems = [
     { title: "Documents", link: "/dashboard/documents" },
     { title: "Upload", link: "/dashboard/documents/upload" },

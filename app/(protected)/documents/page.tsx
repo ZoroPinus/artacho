@@ -6,7 +6,7 @@ import { DocumentClient } from "@/components/tables/document-tables/client";
 import { useEffect, useState } from "react";
 import { Document } from "@/constants/data";
 const breadcrumbItems = [{ title: "Document", link: "/dashboard/document" }];
-export default function page() {
+export default function DocumentsPage() {
   const [data, setDocuments] = useState<Document[]>([]);
   const fetchDocuments = async () => {
     documents().then((res) => {
