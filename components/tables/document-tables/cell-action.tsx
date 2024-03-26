@@ -22,6 +22,31 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
+  const handleDownload = async () => {
+    try {
+      // Fetch the file data from the URL
+      const response = await fetch(data.fileUrl);
+      const blob = await response.blob();
+
+      // Create a blob URL for the file data
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // Create a temporary link element
+      const tempLink = document.createElement('a');
+      tempLink.href = blobUrl;
+      tempLink.setAttribute('download', 'downloaded-file'); // Set the desired file name
+
+      // Append the link to the body and click it to start the download
+      document.body.appendChild(tempLink);
+      tempLink.click();
+
+      // Remove the temporary link element
+      document.body.removeChild(tempLink);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      // Handle error if needed
+    }
+  };
   const onConfirm = async () => {};
 
   return (
@@ -41,7 +66,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-
+          <DropdownMenuItem
+            onClick={()=>handleDownload()}
+          >
+            <Edit className="mr-2 h-4 w-4" /> Download
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push(`/documents/upload`)}
           >

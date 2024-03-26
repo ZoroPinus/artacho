@@ -19,6 +19,9 @@ interface ProductsClientProps {
 export const UserClient: React.FC<ProductsClientProps> = ({ data, isDashboard, }) => {
   const router = useRouter();
   
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
 
   return (

@@ -17,6 +17,10 @@ export const columns: ColumnDef<Document>[] = [
     header: "Description",
   },
   {
+    accessorKey: "uploadedAt",
+    header: "Date",
+  },
+  {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
   },

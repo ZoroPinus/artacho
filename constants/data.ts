@@ -22,38 +22,11 @@ export type Document = {
   description: string;
   type: string;
   status: string;
+  fileUrl:string;
+  uploaded_at:Date
 };
 
-export const documents: Document[] = [
-  {
-    id: 1,
-    name: 'Document 1',
-    description: 'This is the first document',
-    type: 'PDF',
-    status: 'Active',
-  },
-  {
-    id: 2,
-    name: 'Document 2',
-    description: 'A sample document for testing',
-    type: 'Word',
-    status: 'Inactive',
-  },
-  {
-    id: 3,
-    name: 'Document 3',
-    description: 'Another document example',
-    type: 'Excel',
-    status: 'Active',
-  },
-  {
-    id: 4,
-    name: 'Document 4',
-    description: 'Document with confidential information',
-    type: 'PDF',
-    status: 'Active',
-  },
-];
+
 
 export const users: User[] = [
   {

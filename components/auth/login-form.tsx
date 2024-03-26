@@ -110,7 +110,7 @@ export const LoginForm = () => {
                           type="password"
                         />
                       </FormControl>
-                      <Button
+                      {/* <Button
                         size="sm"
                         variant="link"
                         asChild
@@ -119,7 +119,7 @@ export const LoginForm = () => {
                         <Link href="/auth/reset">
                           Forgot password?
                         </Link>
-                      </Button>
+                      </Button> */}
                       <FormMessage />
                     </FormItem>
                   )}

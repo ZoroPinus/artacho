@@ -21,6 +21,9 @@ export const DocumentClient: React.FC<DocumentProps> = ({
   isDashboard,
 }) => {
   const router = useRouter();
+  if (!data) {
+    return <div>Loading...</div>;
+  }
   return (
     <>
       {isDashboard ? (
