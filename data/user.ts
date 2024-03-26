@@ -45,3 +45,27 @@ export const getAllMembers = async () => {
     return null;
   }
 };
+
+export const getAllAdmin = async () => {
+  try {
+    const users = await db.user.findMany({
+      where: { role: UserRole.ADMIN },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        gender: true,
+        address: true,
+        age: true,
+        role: true,
+        createdAt: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return users;
+  } catch {
+    return null;
+  }
+};

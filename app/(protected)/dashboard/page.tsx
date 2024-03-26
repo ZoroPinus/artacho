@@ -3,19 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { DocumentClient } from "@/components/tables/document-tables/client";
 import { UserClient } from "@/components/tables/user-tables/client";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload } from "lucide-react";
 import { useRouter } from "next/navigation";
 // import axios from "axios";
 import { useEffect, useState } from "react";
-import { members } from "@/actions/members";
+import { members, admin } from "@/actions/members";
 import { documents } from "@/actions/document";
 import { User } from "@/types";
 import { Document } from "@/constants/data";
@@ -25,13 +20,22 @@ const DashboardPage = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [error, setError] = useState<string | undefined>();
-  const [memberData, setMembers] = useState<User[] >([]);
 
+  const [memberData, setMembers] = useState<User[]>([]);
   const [documentData, setDocuments] = useState<Document[]>([]);
+  const [adminCount, setAdminCount] = useState<number>(0);
+
   const fetchDocuments = async () => {
     documents().then((res) => {
       // @ts-ignore
       setDocuments(res);
+    });
+  };
+
+  const getAdminCount = async () => {
+    admin().then((res) => {
+      // @ts-ignore
+      setAdminCount(res);
     });
   };
 
@@ -43,11 +47,13 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    fetchDocuments()
+    getAdminCount();
+    fetchDocuments();
     fetchMembers();
   }, []);
 
-
+  const totalMembers = memberData.length;
+  const totalDocuments = documentData.length;
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -88,7 +94,7 @@ const DashboardPage = () => {
                       </svg>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">123</div>
+                      <div className="text-2xl font-bold">{totalMembers}</div>
                     </CardContent>
                   </Card>
                   <Card>
@@ -110,7 +116,7 @@ const DashboardPage = () => {
                       </svg>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">573</div>
+                      <div className="text-2xl font-bold">{adminCount}</div>
                     </CardContent>
                   </Card>
                   <Card>
@@ -133,7 +139,7 @@ const DashboardPage = () => {
                       </svg>
                     </CardHeader>
                     <CardContent>
-                      <div className="text-2xl font-bold">234</div>
+                      <div className="text-2xl font-bold">{totalDocuments}</div>
                     </CardContent>
                   </Card>
                 </div>
@@ -162,7 +168,7 @@ const DashboardPage = () => {
               <div className="h-full">
                 <Card className="col-span-4 md:col-span-2">
                   <CardHeader>
-                    <CardTitle>What Makes Up Your Documents?</CardTitle>
+                    <CardTitle className="text-3xl">What Makes Up Your Documents?</CardTitle>
                   </CardHeader>
                   <CardContent>
                     {/* Top */}
@@ -174,36 +180,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">60</p>{" "}
+                          <p className="text-lg font-bold ml-auto">0</p>{" "}
                         </div>
                       </div>
-                      <Progress value={60} />
-                    </div>
-                    {/* XLSX */}
-                    <div className="py-3">
-                      <div className="flex items-center space-x-4 w-full ">
-                        <div className="w-1/2">
-                          <p className="text-lg font-bold">XLSX</p>
-                        </div>
-                        <div className="w-1/2 flex items-center space-x-2">
-                          <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">500</p>{" "}
-                        </div>
-                      </div>
-                      <Progress value={48} />
-                    </div>
-                    {/* Docx */}
-                    <div className="py-3">
-                      <div className="flex items-center space-x-4 w-full ">
-                        <div className="w-1/2">
-                          <p className="text-lg font-bold">Docx</p>
-                        </div>
-                        <div className="w-1/2 flex items-center space-x-2">
-                          <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">10</p>{" "}
-                        </div>
-                      </div>
-                      <Progress value={45} />
+                      <Progress value={0} />
                     </div>
                     {/* PNG */}
                     <div className="py-3">
@@ -213,10 +193,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">700</p>{" "}
+                          <p className="text-lg font-bold ml-auto">0</p>{" "}
                         </div>
                       </div>
-                      <Progress value={19} />
+                      <Progress value={0} />
                     </div>
                     {/* JPEG */}
                     <div className="py-3">
@@ -226,10 +206,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">520</p>{" "}
+                          <p className="text-lg font-bold ml-auto">0</p>{" "}
                         </div>
                       </div>
-                      <Progress value={70} />
+                      <Progress value={0} />
                     </div>
                     {/* Bottom */}
                     <div
@@ -264,5 +244,5 @@ const DashboardPage = () => {
       </div>
     </ScrollArea>
   );
-}
+};
 export default DashboardPage;

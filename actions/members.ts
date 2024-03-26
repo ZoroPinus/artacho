@@ -1,6 +1,6 @@
 "use server";
 
-import { getAllMembers, getUserById } from "@/data/user";
+import { getAllMembers, getUserById, getAllAdmin } from "@/data/user";
 
 export const members = async () => {
   const fetchMembers = await getAllMembers();
@@ -21,5 +21,15 @@ export const getInputFields = async (id:string) =>{
 
   return fetchInputFields
 }
+
+export const admin = async () => {
+  const fetchAdmins = await getAllAdmin();
+  const adminCount = fetchAdmins!.length;
+  if (fetchAdmins == null) {
+    return { error: "No Result" };
+  }
+
+  return adminCount
+};
 
 
