@@ -35,6 +35,31 @@ export const uploadDocument = async (
   return { success: "Upload Complete!" };
 };
 
+
+
+export const deleteDocument = async (documentId: string) => {
+  const document = await getDocumentById(documentId);
+
+  if (!document) {
+    return { error: "Document not found" };
+  }
+
+  // Check if the current user is authorized to delete the document
+  const userId = await currentUser();
+  if (!userId || userId.id ) {
+    return { error: "Unauthorized to delete this document" };
+  }
+
+  await db.document.delete({
+    where: {
+      id: documentId,
+    },
+  });
+
+  return { success: "Document deleted successfully" };
+};
+
+
 export const documents = async () => {
   const fetchDocuments = await getAllDocuments();
 

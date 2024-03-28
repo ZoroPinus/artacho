@@ -1,7 +1,7 @@
 "use server";
 
-import { getAllMembers, getUserById, getAllAdmin } from "@/data/user";
-
+import { getAllMembers, getUserById, getAllAdmin, deleteUserById } from "@/data/user";
+import { currentUser } from "@/lib/auth";
 export const members = async () => {
   const fetchMembers = await getAllMembers();
 
@@ -21,6 +21,25 @@ export const getInputFields = async (id:string) =>{
 
   return fetchInputFields
 }
+
+export const deleteUser = async (id: string) => {
+  const userToDelete = await getUserById(id);
+
+  if (!userToDelete) {
+    return { error: "User not found" };
+  }
+
+   // Check if the current user is an admin
+   const currentUserData = await currentUser();
+   if (!currentUserData || currentUserData.role !== "ADMIN") {
+     return { error: "Unauthorized to delete users" };
+   }
+  
+  await deleteUserById(id);
+
+  return { success: "User deleted successfully" };
+};
+
 
 export const admin = async () => {
   const fetchAdmins = await getAllAdmin();

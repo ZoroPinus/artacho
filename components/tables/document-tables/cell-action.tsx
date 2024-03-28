@@ -1,4 +1,5 @@
 "use client";
+import { deleteDocument } from "@/actions/document";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +13,7 @@ import { Document } from "@/constants/data";
 import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { useToast } from "@/components/ui/use-toast";
 interface CellActionProps {
   data: Document;
 }
@@ -21,6 +22,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const handleDownload = async () => {
     try {
@@ -32,9 +34,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       const blobUrl = window.URL.createObjectURL(blob);
 
       // Create a temporary link element
-      const tempLink = document.createElement('a');
+      const tempLink = document.createElement("a");
       tempLink.href = blobUrl;
-      tempLink.setAttribute('download', 'downloaded-file'); // Set the desired file name
+      tempLink.setAttribute("download", "downloaded-file"); // Set the desired file name
 
       // Append the link to the body and click it to start the download
       document.body.appendChild(tempLink);
@@ -43,11 +45,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       // Remove the temporary link element
       document.body.removeChild(tempLink);
     } catch (error) {
-      console.error('Error downloading file:', error);
+      console.error("Error downloading file:", error);
       // Handle error if needed
     }
   };
   const onConfirm = async () => {};
+
+  const onDelete = async () => {
+    const res = await deleteDocument(data.id);
+    if (res.success) {
+      console.log('Success')
+    } else {
+      console.log('error')
+    }
+  };
 
   return (
     <>
@@ -66,17 +77,13 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuItem
-            onClick={()=>handleDownload()}
-          >
+          <DropdownMenuItem onClick={() => handleDownload()}>
             <Edit className="mr-2 h-4 w-4" /> Download
           </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => router.push(`/documents/upload`)}
-          >
+          <DropdownMenuItem onClick={() => router.push(`/documents/upload`)}>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem onClick={() => onDelete()}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

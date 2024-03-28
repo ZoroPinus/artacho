@@ -69,3 +69,23 @@ export const getAllAdmin = async () => {
     return null;
   }
 };
+export const deleteUserById = async (id: string) => {
+  try {
+    // Check if the user exists before deleting
+    const userToDelete = await db.user.findUnique({ where: { id } });
+    if (!userToDelete) {
+      throw new Error("User not found");
+    }
+
+    // Perform any additional checks for authorization or validation here if needed
+    // For example, check if the user is an admin and prevent deletion if necessary
+
+    await db.user.delete({ where: { id } });
+
+    // Optionally, you can return a success message or simply return null if no errors occur
+    return { success: "User deleted successfully" };
+  } catch (error) {
+    // Handle errors such as database errors or user not found error
+    return { error: error instanceof Error ? error.message : "Error deleting user" };
+  }
+};

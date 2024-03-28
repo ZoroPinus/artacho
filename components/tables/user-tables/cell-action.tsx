@@ -12,6 +12,7 @@ import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "@/types";
+import { deleteUser } from "@/actions/members";
 
 interface CellActionProps {
   data: User;
@@ -23,6 +24,15 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter();
 
   const onConfirm = async () => {};
+
+  const onDelete = async () => {
+    const res = await deleteUser(data.id);
+    if (res.success) {
+      console.log('Success')
+    } else {
+      console.log('error')
+    }
+  };
 
   return (
     <>
@@ -47,7 +57,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           >
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setOpen(true)}>
+          <DropdownMenuItem onClick={() => onDelete()}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>

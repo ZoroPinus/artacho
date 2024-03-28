@@ -10,6 +10,7 @@ export const getDocumentById = async (id: string) => {
   }
 };
 
+
 export const getAllDocuments = async () => {
   try {
     const document = await db.document.findMany({
