@@ -15,7 +15,7 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
               alt="Website logo"
               src="https://utfs.io/f/d3fdfc03-cf46-467b-86e5-613e6a6e7acf-2a.png"
             />
-            <h1 className="text-2xl font-medium text-white mt-2">System Title</h1>
+            <h1 className="text-2xl font-medium text-white mt-2">ARTACHO</h1>
           </div>
         </div>
       </div>
