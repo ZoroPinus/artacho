@@ -54,6 +54,14 @@ const DashboardPage = () => {
 
   const totalMembers = memberData.length;
   const totalDocuments = documentData.length;
+
+  // Filter documents by file type (PNG or PDF)
+  const pngDocuments = documentData.filter((doc) =>
+    doc.fileUrl?.toLowerCase().endsWith(".png")
+  );
+  const pdfDocuments = documentData.filter((doc) =>
+    doc.fileUrl?.toLowerCase().endsWith(".pdf")
+  );
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -180,10 +188,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">0</p>{" "}
+                          <p className="text-lg font-bold ml-auto">{pdfDocuments.length}</p>{" "}
                         </div>
                       </div>
-                      <Progress value={0} />
+                      <Progress value={pdfDocuments.length/100} />
                     </div>
                     {/* PNG */}
                     <div className="py-3">
@@ -193,10 +201,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">0</p>{" "}
+                          <p className="text-lg font-bold ml-auto">{pngDocuments.length}</p>{" "}
                         </div>
                       </div>
-                      <Progress value={0} />
+                      <Progress value={pngDocuments.length/100} />
                     </div>
                     {/* JPEG */}
                     <div className="py-3">

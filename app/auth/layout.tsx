@@ -10,8 +10,8 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
         <div className="relative z-20 flex items-center justify-center h-full">
           <div className="flex flex-col items-center">
             <Image
-              width={170}
-              height={170}
+              width={270}
+              height={270}
               alt="Website logo"
               src="https://utfs.io/f/d3fdfc03-cf46-467b-86e5-613e6a6e7acf-2a.png"
             />
