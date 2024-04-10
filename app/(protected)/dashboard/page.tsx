@@ -206,19 +206,6 @@ const DashboardPage = () => {
                       </div>
                       <Progress value={pngDocuments.length/100} />
                     </div>
-                    {/* JPEG */}
-                    <div className="py-3">
-                      <div className="flex items-center space-x-4 w-full ">
-                        <div className="w-1/2">
-                          <p className="text-lg font-bold">JPEG</p>
-                        </div>
-                        <div className="w-1/2 flex items-center space-x-2">
-                          <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">0</p>{" "}
-                        </div>
-                      </div>
-                      <Progress value={0} />
-                    </div>
                     {/* Bottom */}
                     <div
                       className={`mt-2 flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 text-center `}

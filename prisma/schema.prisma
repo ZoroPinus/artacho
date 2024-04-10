@@ -28,7 +28,7 @@ enum DocumentType {
 
 model User {
   id                    String                 @id @default(cuid()) @map("_id")
-  name                  String?
+  name                  String?                @unique
   email                 String?                @unique
   emailVerified         DateTime?
   image                 String?
@@ -101,6 +101,7 @@ model TwoFactorConfirmation {
 
 model Document {
   id          String       @id @default(cuid()) @map("_id")
+  memberName  String
   fileName    String
   description String?
   fileUrl     String

@@ -18,7 +18,8 @@ export type User = {
 
 export type Document = {
   id: string;
-  name: string;
+  memberName: string;
+  fileName: string;
   description: string;
   type: string;
   status: string;

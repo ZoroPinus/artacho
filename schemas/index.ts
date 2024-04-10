@@ -96,6 +96,7 @@ export const FileSchema = z.object({
 });
 
 export const UploadFormSchema = z.object({
+  memberName: z.string().min(3, { message: "Select a member related to the document" }),
   fileName: z.string().min(3, { message: "Enter a file name" }),
   description: z
     .string()
@@ -103,8 +104,7 @@ export const UploadFormSchema = z.object({
   fileUrl: z
     .array(FileSchema)
     .max(3, { message: "You can only add up to 3 images" })
-    .min(1, { message: "At least one file must be added." }),
-  fileType: z.string().min(1, { message: "Please select a category" }),
+    .min(1, { message: "At least one file must be added." })
 });
 
 export const UploadSchema = z.object({

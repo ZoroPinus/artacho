@@ -4,7 +4,7 @@ import * as z from "zod";
 
 import { db } from "@/lib/db";
 import { MemberRegisterSchema } from "@/schemas";
-import { getUserByEmail } from "@/data/user";
+import { getUserByEmail, getUserByName } from "@/data/user";
 
 export const registerMember = async (
   values: z.infer<typeof MemberRegisterSchema>
@@ -18,9 +18,14 @@ export const registerMember = async (
   const { name, email, phone, address, age, gender } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
+  const existingUser2 = await getUserByName(name);
 
   if (existingUser) {
     return { error: "Email already in use!" };
+  }
+
+  if (existingUser2) {
+    return { error: "Name already in use!" };
   }
 
   await db.user.create({

@@ -201,7 +201,7 @@ export const MemberRegistrationForm= () => {
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} className="ml-auto w-full " type="submit">
+          <Button disabled={isPending} className="w-full text-zinc-900 bg-green-400 hover:bg-green-900 hover:text-white" type="submit">
             Submit
           </Button>
         </form>

@@ -120,7 +120,7 @@ export const RegisterForm = () => {
           <Button
             disabled={isPending}
             type="submit"
-            className="w-full"
+            className="w-full text-zinc-900 bg-green-400 hover:bg-green-900 hover:text-white"
           >
             Create an account
           </Button>

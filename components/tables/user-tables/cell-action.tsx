@@ -8,7 +8,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Trash, File } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "@/types";
@@ -52,6 +52,11 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
 
+          <DropdownMenuItem
+            onClick={() => router.push(`/members/${data.name}`)}
+          >
+            <File className="mr-2 h-4 w-4" /> Documents
+          </DropdownMenuItem>
           <DropdownMenuItem
             onClick={() => router.push(`/members/create`)}
           >

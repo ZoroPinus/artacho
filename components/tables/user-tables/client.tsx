@@ -10,41 +10,51 @@ import { useRouter } from "next/navigation";
 import { columns } from "./columns";
 import { columnsDashboard } from "./columnsDashboard";
 import { User } from "@/types";
+import { UserRole } from "@prisma/client";
 
 interface ProductsClientProps {
-  data: User[] ;
+  data: User[];
   isDashboard: Boolean;
 }
 
-export const UserClient: React.FC<ProductsClientProps> = ({ data, isDashboard, }) => {
+export const UserClient: React.FC<ProductsClientProps> = ({
+  data,
+  isDashboard,
+}) => {
   const router = useRouter();
-  
+
   if (!data) {
     return <div>Loading...</div>;
   }
 
-
   return (
     <>
-    {isDashboard ? (
+      {isDashboard ? (
         <DataTableUserDashboard columns={columnsDashboard} data={data} />
       ) : (
         <>
-      <div className="flex items-start justify-between">
-        <Heading
-          title={`Users (${data.length})`}
-          description="Manage current users "
-        />
-        <Button
-          className="text-xs md:text-sm"
-          onClick={() => router.push(`/members/create`)}
-        >
-          <Plus className="mr-2 h-4 w-4" /> Add New
-        </Button>
-      </div>
-      <Separator />
-      <DataTable searchKey="name" columns={columns} data={data} />
-      </>
+          <div className="flex items-start justify-between">
+            <Heading
+              title={`Users (${data.length})`}
+              description="Manage current users "
+            />
+
+            {UserRole.ADMIN ? (
+              <>
+                <Button
+                  className="text-xs md:text-sm"
+                  onClick={() => router.push(`/members/create`)}
+                >
+                  <Plus className="mr-2 h-4 w-4" /> Add New
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
+          </div>
+          <Separator />
+          <DataTable searchKey="name" columns={columns} data={data} />
+        </>
       )}
     </>
   );

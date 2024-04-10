@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Document } from "@/constants/data";
-import { Edit, MoreHorizontal, Trash, Download } from "lucide-react";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -84,8 +84,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          
           <DropdownMenuItem onClick={() => handleDownload()}>
-            <Download className="mr-2 h-4 w-4" /> Download
+            <Edit className="mr-2 h-4 w-4" /> Download
           </DropdownMenuItem>
           <DropdownMenuItem onClick={() => router.push(`/documents/upload`)}>
             <Edit className="mr-2 h-4 w-4" /> Update

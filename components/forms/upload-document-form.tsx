@@ -1,6 +1,6 @@
 "use client";
 import * as z from "zod";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Trash } from "lucide-react";
@@ -31,8 +31,10 @@ import FileUpload from "../file-upload";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 import { uploadDocument } from "@/actions/document";
-import { UploadFormSchema, } from "@/schemas";
+import { UploadFormSchema } from "@/schemas";
 import { UploadButton, UploadDropzone } from "../uploadthing";
+import { members } from "@/actions/members";
+import { User } from "@/types";
 
 type UploadFormValues = z.infer<typeof UploadFormSchema>;
 
@@ -60,6 +62,7 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const [memberData, setMembers] = useState<User[]>([]);
 
   const defaultValues = initialData
     ? initialData
@@ -83,38 +86,28 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
     startTransition(() => {
       uploadDocument(values).then((data) => {
         setError(data?.error);
-        if(data?.success){
+        if (data?.success) {
           form.reset();
           setSuccess(data?.success);
         }
       });
     });
   };
-
-
-  const onDelete = async () => {
-    try {
-      setLoading(true);
-      await axios.delete(`/api/${params.storeId}/products/${params.productId}`);
-      router.refresh();
-      router.push(`/${params.storeId}/products`);
-    } catch (error: any) {
-    } finally {
-      setLoading(false);
-      setOpen(false);
-    }
+  
+  const fetchMembers = async () => {
+    members().then((res) => {
+      // @ts-ignore
+      setMembers(res);
+      console.log(res)
+    });
   };
 
-  const triggerImgUrlValidation = () => form.trigger("fileUrl");
+  useEffect(() => {
+    fetchMembers();
+  }, []);
 
   return (
     <>
-      {/* <AlertModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onConfirm={onDelete}
-        loading={loading}
-      /> */}
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {initialData && (
@@ -175,6 +168,40 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
           <div className="md:grid md:grid-cols-3 gap-8">
             <FormField
               control={form.control}
+              name="memberName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Member Name</FormLabel>
+                  <Select
+                    disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select the member whose document is to be uploaded"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {/* @ts-ignore  */}
+                      {memberData.map((category) => (
+                        <SelectItem key={category.name} value={category.name}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="fileName"
               render={({ field }) => (
                 <FormItem>
@@ -207,41 +234,8 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
                 </FormItem>
               )}
             />
-            <FormField
-              control={form.control}
-              name="fileType"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>File Type</FormLabel>
-                  <Select
-                    disabled={loading}
-                    onValueChange={field.onChange}
-                    value={field.value}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue
-                          defaultValue={field.value}
-                          placeholder="Select file type"
-                        />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {/* @ts-ignore  */}
-                      {categories.map((category) => (
-                        <SelectItem key={category._id} value={category._id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
-          <FormError message={error } />
+          <FormError message={error} />
           <FormSuccess message={success} />
           <Button disabled={loading} className="ml-auto" type="submit">
             {action}

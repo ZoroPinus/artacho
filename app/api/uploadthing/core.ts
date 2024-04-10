@@ -1,8 +1,5 @@
-import { useCurrentUser } from "@/hooks/use-current-user";
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import * as zod from 'zod';
-import { revalidatePath } from 'next/cache';
-import { db } from "@/lib/db";
 
 const f = createUploadthing({
 	errorFormatter: error => {

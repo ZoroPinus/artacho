@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Plus } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { columnsDashboard } from "@/components/tables/document-tables/columnsDashboard";
+import { UserRole } from "@prisma/client";
 
 interface DocumentProps {
   data: Document[];
@@ -35,15 +36,21 @@ export const DocumentClient: React.FC<DocumentProps> = ({
               title={`Documents (${data.length})`}
               description="Manage Documents"
             />
-            <Button
-              className="text-xs md:text-sm"
-              onClick={() => router.push(`/documents/upload`)}
-            >
-              <Plus className="mr-2 h-4 w-4" /> Upload New
-            </Button>
+            {UserRole.ADMIN ? (
+              <>
+                <Button
+                  className="text-xs md:text-sm"
+                  onClick={() => router.push(`/documents/upload`)}
+                >
+                  <Plus className="mr-2 h-4 w-4" /> Upload New
+                </Button>
+              </>
+            ) : (
+              <></>
+            )}
           </div>
           <Separator />
-          <DataTable searchKey="fileName" columns={columns} data={data} />
+          <DataTable searchKey="memberName" columns={columns} data={data} />
         </>
       )}
     </>
