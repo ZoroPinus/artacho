@@ -53,7 +53,7 @@ export const UserClient: React.FC<ProductsClientProps> = ({
             )}
           </div>
           <Separator />
-          <DataTable searchKey="name" columns={columns} data={data} />
+          <DataTable searchKey="id" columns={columns} data={data} />
         </>
       )}
     </>

@@ -1,4 +1,4 @@
-"use server";
+"use server"
 
 import * as z from "zod";
 import bcrypt from "bcryptjs";
@@ -6,8 +6,6 @@ import bcrypt from "bcryptjs";
 import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
-import { sendVerificationEmail } from "@/lib/mail";
-import { generateVerificationToken } from "@/lib/tokens";
 import { UserRole } from "@prisma/client";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
@@ -26,8 +24,12 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Email already in use!" };
   }
 
+  // Generate a unique user ID here
+  const userId = await generateUserId();
+
   await db.user.create({
     data: {
+      id: userId,
       name,
       email,
       password: hashedPassword,
@@ -35,11 +37,17 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     },
   });
 
-  // const verificationToken = await generateVerificationToken(email);
-  // await sendVerificationEmail(
-  //   verificationToken.email,
-  //   verificationToken.token,
-  // );
-
   return { success: "Registration Complete!" };
+};
+
+const generateUserId = () => {
+  const dateNow = new Date();
+  const year = dateNow.getFullYear();
+  const month = dateNow.getMonth() + 1;
+  const day = dateNow.getDate();
+  const roleCode = UserRole.ADMIN ? "A" : "M";
+
+  // Combine date parts and role code to create a unique ID
+  const userId = `${year}${month}${day}${roleCode}${Math.floor(Math.random() * 10000)}`;
+  return userId;
 };

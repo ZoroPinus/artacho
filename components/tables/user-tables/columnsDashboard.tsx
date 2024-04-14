@@ -5,6 +5,10 @@ import { User } from "@/types";
 
 export const columnsDashboard: ColumnDef<User>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "name",
     header: "NAME",
   },
