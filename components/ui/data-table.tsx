@@ -19,17 +19,18 @@ import {
 import { Input } from "./input";
 import { Button } from "./button";
 import { ScrollArea, ScrollBar } from "./scroll-area";
+import { useState } from "react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  searchKey: string;
+  searchKeys: string[];
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchKey,
+  searchKeys,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -37,18 +38,19 @@ export function DataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
-
+  const [searchValue, setSearchValue] = useState("");
   /* this can be used to get the selectedrows 
   console.log("value", table.getFilteredSelectedRowModel()); */
-
+  const handleSearchInputChange = (value: string) => {
+    setSearchValue(value);
+    table.setGlobalFilter(value); 
+  };
   return (
     <>
       <Input
-        placeholder={`Search ${searchKey}...`}
-        value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn(searchKey)?.setFilterValue(event.target.value)
-        }
+        placeholder={`Search ${searchKeys.join(", ")}...`}
+        value={searchValue}
+        onChange={(event) => handleSearchInputChange(event.target.value)}
         className="w-full md:max-w-sm"
       />
       <ScrollArea className="rounded-md border h-[calc(80vh-220px)]">
@@ -63,7 +65,7 @@ export function DataTable<TData, TValue>({
                         ? null
                         : flexRender(
                             header.column.columnDef.header,
-                            header.getContext(),
+                            header.getContext()
                           )}
                     </TableHead>
                   );
@@ -82,7 +84,7 @@ export function DataTable<TData, TValue>({
                     <TableCell key={cell.id}>
                       {flexRender(
                         cell.column.columnDef.cell,
-                        cell.getContext(),
+                        cell.getContext()
                       )}
                     </TableCell>
                   ))}
