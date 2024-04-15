@@ -31,7 +31,7 @@ export const MemberDocumentClient: React.FC<DocumentProps> = ({
         
       </div>
       <Separator />
-      <DataTable searchKey="fileName" columns={columns} data={data} />
+      <DataTable searchKeys={["memberName", "fileName", "fileType", "description"]} columns={columns} data={data} />
     </>
   );
 };
