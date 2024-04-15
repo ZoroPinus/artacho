@@ -33,6 +33,8 @@ export const MemberRegisterSchema = z.object({
   address: z.string(),
   age: z.coerce.number().min(2, { message: "Please input your age" }),
   gender: z.string().min(1, { message: "Please select a gender" }),
+  idType: z.string().min(1, { message: "Please select an ID type" }),
+  id: z.string().min(1, { message: "Please input your ID number" }),
 });
 
 export const FileSchema = z.object({

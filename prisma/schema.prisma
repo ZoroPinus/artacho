@@ -27,21 +27,22 @@ enum DocumentType {
 }
 
 model User {
-  id                    String                 @id @map("_id")
-  name                  String?                @unique
-  email                 String?                @unique
-  emailVerified         DateTime?
-  image                 String?
-  password              String?
-  gender                String?
-  address               String?
-  phone                 String?
-  age                   Int?
-  role                  UserRole               @default(MEMBER)
-  createdAt             DateTime               @default(now()) @map("created_at")
-  updatedAt             DateTime               @default(now()) @updatedAt @map("updated_at")
+  id            String    @id @map("_id")
+  name          String?   @unique
+  email         String?   @unique
+  idType        String?
+  idNo          String?      
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  gender        String?
+  address       String?
+  phone         String?
+  age           Int?
+  role          UserRole  @default(MEMBER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
 }
-
 
 model Document {
   id          String       @id @default(cuid()) @map("_id")

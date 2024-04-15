@@ -16,7 +16,7 @@ export const registerMember = async (
     return { error: "Invalid fields!" };
   }
 
-  const { name, email, phone, address, age, gender } = validatedFields.data;
+  const { name, email, phone, address, age, gender, id, idType } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
   const existingUser2 = await getUserByName(name);
@@ -41,7 +41,9 @@ export const registerMember = async (
       address,
       age,
       gender,
-      role: UserRole.MEMBER // Assuming UserRole is imported from Prisma
+      role: UserRole.MEMBER,
+      idType: idType,
+      idNo: id
     },
   });
 

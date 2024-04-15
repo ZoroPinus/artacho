@@ -45,6 +45,8 @@ export const getAllMembers = async () => {
         gender: true,
         address: true,
         age: true,
+        idType: true,
+        idNo: true,
         role: true,
         createdAt: true,
       },

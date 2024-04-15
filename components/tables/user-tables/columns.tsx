@@ -6,12 +6,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 
 export const columns: ColumnDef<User>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
-    
-    
-  },
-  {
     accessorKey: "name",
     header: "NAME",
     
@@ -40,6 +34,15 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "gender",
     header: "GENDER",
     
+  },
+  {
+    accessorKey: "idType",
+    header: "ID TYPE",
+    
+  },
+  {
+    accessorKey: "idNo",
+    header: "ID NUMBER",
   },
   {
     accessorKey: "role",

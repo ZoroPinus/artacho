@@ -31,28 +31,38 @@ import { MemberRegisterSchema } from "@/schemas";
 import { registerMember } from "@/actions/registerMember";
 import { useSearchParams } from "next/navigation";
 
-
-export const MemberRegistrationForm= () => {
+export const MemberRegistrationForm = () => {
   const searchParams = useSearchParams();
-  const urlError = searchParams.get("error") === "OAuthAccountNotLinked"
-    ? "Email already in use with google!"
-    : "";
-    
+  const urlError =
+    searchParams.get("error") === "OAuthAccountNotLinked"
+      ? "Email already in use with google!"
+      : "";
+
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
-  const categories = [
+  const genderCategories = [
     { _id: "male", name: "male" },
     { _id: "female", name: "female" },
-  ]
+  ];
+  const idCategories = [
+    { _id: "National ID", name: "National ID" },
+    { _id: "Passport", name: "Passport" },
+    { _id: "Drivers License", name: "Drivers License" },
+    { _id: "Philhealth ID", name: "Philhealth ID" },
+    { _id: "Students ID", name: "Students ID" },
+  ];
+
   const form = useForm<z.infer<typeof MemberRegisterSchema>>({
     resolver: zodResolver(MemberRegisterSchema),
     defaultValues: {
-      name: undefined ,
-      email: undefined ,
-      phone: undefined ,
-      address: undefined ,
-      gender: undefined ,
+      name: undefined,
+      email: undefined,
+      phone: undefined,
+      address: undefined,
+      gender: undefined,
+      id: undefined,
+      idType: undefined,
     },
   });
 
@@ -151,7 +161,7 @@ export const MemberRegistrationForm= () => {
                     </FormControl>
                     <SelectContent>
                       {/* @ts-ignore  */}
-                      {categories.map((category) => (
+                      {genderCategories.map((category) => (
                         <SelectItem key={category._id} value={category._id}>
                           {category.name}
                         </SelectItem>
@@ -198,10 +208,66 @@ export const MemberRegistrationForm= () => {
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name="idType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ID Type</FormLabel>
+                  <Select
+                    disabled={isPending}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select Type of ID"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {/* @ts-ignore  */}
+                      {idCategories.map((category) => (
+                        <SelectItem key={category._id} value={category._id}>
+                          {category.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>ID NUMBER</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="id"
+                      placeholder="Enter your id number..."
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
           <FormError message={error || urlError} />
           <FormSuccess message={success} />
-          <Button disabled={isPending} className="w-full text-zinc-900 bg-green-400 hover:bg-green-900 hover:text-white" type="submit">
+          <Button
+            disabled={isPending}
+            className="w-full text-zinc-900 bg-green-400 hover:bg-green-900 hover:text-white"
+            type="submit"
+          >
             Submit
           </Button>
         </form>
