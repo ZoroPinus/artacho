@@ -50,7 +50,7 @@ export const MemberRegistrationForm = () => {
     { _id: "Passport", name: "Passport" },
     { _id: "Drivers License", name: "Drivers License" },
     { _id: "Philhealth ID", name: "Philhealth ID" },
-    { _id: "Students ID", name: "Students ID" },
+    { _id: "Student ID", name: "Student ID" },
   ];
 
   const form = useForm<z.infer<typeof MemberRegisterSchema>>({
