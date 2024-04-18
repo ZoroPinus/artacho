@@ -33,6 +33,15 @@ export const columnsDashboard: ColumnDef<User>[] = [
     header: "GENDER",
   },
   {
+    accessorKey: "idType",
+    header: "ID TYPE",
+    
+  },
+  {
+    accessorKey: "idNo",
+    header: "ID NUMBER",
+  },
+  {
     accessorKey: "role",
     header: "ROLE",
   },
