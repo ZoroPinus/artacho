@@ -35,7 +35,8 @@ import { UploadFormSchema } from "@/schemas";
 import { UploadButton, UploadDropzone } from "../uploadthing";
 import { members } from "@/actions/members";
 import { User } from "@/types";
-
+import { useSession } from "next-auth/react";
+import { UserRole } from "@prisma/client";
 type UploadFormValues = z.infer<typeof UploadFormSchema>;
 
 interface UploadFormProps {
@@ -63,6 +64,7 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
   const [memberData, setMembers] = useState<User[]>([]);
+  const { data: session } = useSession();
 
   const defaultValues = initialData
     ? initialData
@@ -93,13 +95,30 @@ export const UploadDocumentForm: React.FC<UploadFormProps> = ({
       });
     });
   };
-  
+
   const fetchMembers = async () => {
-    members().then((res) => {
-      // @ts-ignore
-      setMembers(res);
-      console.log(res)
-    });
+    if (session!.user!.role! == UserRole.ADMIN) {
+      members().then((res) => {
+        // @ts-ignore
+        setMembers(res);
+        console.log(res);
+      });
+    }else{
+      const memberName:User[] = [
+        {
+          address: "Sample Address",
+          id: session!.user!.id!,
+          name: session!.user!.name!,
+          role: session!.user!.role!, // Assuming UserRole.USER is appropriate
+          email: "sample@example.com",
+          gender: "Male", // Or "Female" or any other appropriate value
+          phone: "1234567890",
+          age: 30,
+          createdAt:""
+      }
+      ]
+      setMembers(memberName);
+    }
   };
 
   useEffect(() => {

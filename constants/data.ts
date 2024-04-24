@@ -28,7 +28,7 @@ export type Document = {
 };
 
 
-export const navItems: NavItem[] = [
+export const navItemsAdmin: NavItem[] = [
   {
     title: "Dashboard",
     href: "/dashboard",
@@ -46,5 +46,21 @@ export const navItems: NavItem[] = [
     href: "/members",
     icon: "members",
     label: "members",
+  }
+];
+
+
+export const navItems: NavItem[] = [
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+    icon: "dashboard",
+    label: "Dashboard",
+  },
+  {
+    title: "Documents",
+    href: "/documents",
+    icon: "document",
+    label: "document",
   }
 ];

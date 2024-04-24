@@ -35,6 +35,8 @@ export const MemberRegisterSchema = z.object({
   gender: z.string().min(1, { message: "Please select a gender" }),
   idType: z.string().min(1, { message: "Please select an ID type" }),
   id: z.string().min(1, { message: "Please input your ID number" }),
+  password: z.string().min(1, { message: "Please input your password" }),
+  confirmPassword: z.string().min(1, { message: "Please input your password" }),
 });
 
 export const FileSchema = z.object({

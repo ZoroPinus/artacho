@@ -5,7 +5,8 @@
  */
 export const publicRoutes = [
   "/",
-  "/auth/member-registration"
+  "/auth/member-registration",
+  "/membersPage"
 ];
 
 /**

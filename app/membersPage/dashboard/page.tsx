@@ -11,13 +11,10 @@ import { useRouter } from "next/navigation";
 // import axios from "axios";
 import { useEffect, useState } from "react";
 import { members, admin } from "@/actions/members";
-import { documents, getDocumentsByMember } from "@/actions/document";
+import { documents } from "@/actions/document";
 import { User } from "@/types";
 import { Document } from "@/constants/data";
-import { UserRole } from "@prisma/client";
-import { useSession } from "next-auth/react";
 const DashboardPage = () => {
-  const { data: session } = useSession();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -29,19 +26,10 @@ const DashboardPage = () => {
   const [adminCount, setAdminCount] = useState<number>(0);
 
   const fetchDocuments = async () => {
-    if (session!.user!.role! == UserRole.ADMIN) {
-      documents().then((res) => {
-        // @ts-ignore
-        setDocuments(res);
-      });
-    } else {
-      if (session) {
-        getDocumentsByMember(session.user!.name!).then((res) => {
-          // @ts-ignore
-          setDocuments(res);
-        });
-      }
-    }
+    documents().then((res) => {
+      // @ts-ignore
+      setDocuments(res);
+    });
   };
 
   const getAdminCount = async () => {
@@ -79,11 +67,7 @@ const DashboardPage = () => {
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
           <h2 className="text-3xl font-bold tracking-tight">
-            Hi{" "}
-            {session!.user!.role! == UserRole.ADMIN
-              ? "Admin!"
-              : session!.user!.name!}
-            , Welcome back 👋
+            Hi, Welcome back 👋
           </h2>
           {/* <div className="hidden md:flex items-center space-x-2">
             <CalendarDateRangePicker />
@@ -99,7 +83,7 @@ const DashboardPage = () => {
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
-                        Members
+                        Regular Members
                       </CardTitle>
                       {/* USERS ICON */}
                       <svg
@@ -121,34 +105,28 @@ const DashboardPage = () => {
                       <div className="text-2xl font-bold">{totalMembers}</div>
                     </CardContent>
                   </Card>
-                  {session!.user!.role! == UserRole.ADMIN ? (
-                    <>
-                      <Card>
-                        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                          <CardTitle className="text-sm font-medium">
-                            Admin Members
-                          </CardTitle>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            className="h-4 w-4 text-muted-foreground"
-                          >
-                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                          </svg>
-                        </CardHeader>
-                        <CardContent>
-                          <div className="text-2xl font-bold">{adminCount}</div>
-                        </CardContent>
-                      </Card>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                  <Card>
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                      <CardTitle className="text-sm font-medium">
+                        Admin Members
+                      </CardTitle>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        className="h-4 w-4 text-muted-foreground"
+                      >
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      </svg>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="text-2xl font-bold">{adminCount}</div>
+                    </CardContent>
+                  </Card>
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
@@ -185,28 +163,20 @@ const DashboardPage = () => {
                   </Card>
                 </div>
                 <div>
-                  {session!.user!.role! == UserRole.ADMIN ? (
-                    <>
-                      <Card>
-                        <CardHeader>
-                          <CardTitle>Members</CardTitle>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                          <UserClient data={memberData} isDashboard={true} />
-                        </CardContent>
-                      </Card>
-                    </>
-                  ) : (
-                    <></>
-                  )}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Members</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pl-2">
+                      <UserClient data={memberData} isDashboard={true} />
+                    </CardContent>
+                  </Card>
                 </div>
               </div>
               <div className="h-full">
                 <Card className="col-span-4 md:col-span-2">
                   <CardHeader>
-                    <CardTitle className="text-3xl">
-                      What Makes Up Your Documents?
-                    </CardTitle>
+                    <CardTitle className="text-3xl">What Makes Up Your Documents?</CardTitle>
                   </CardHeader>
                   <CardContent>
                     {/* Top */}
@@ -218,12 +188,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">
-                            {pdfDocuments.length}
-                          </p>{" "}
+                          <p className="text-lg font-bold ml-auto">{pdfDocuments.length}</p>{" "}
                         </div>
                       </div>
-                      <Progress value={pdfDocuments.length / 100} />
+                      <Progress value={pdfDocuments.length/100} />
                     </div>
                     {/* PNG */}
                     <div className="py-3">
@@ -233,12 +201,10 @@ const DashboardPage = () => {
                         </div>
                         <div className="w-1/2 flex items-center space-x-2">
                           <p className="text-lg font-bold flex-grow"></p>{" "}
-                          <p className="text-lg font-bold ml-auto">
-                            {pngDocuments.length}
-                          </p>{" "}
+                          <p className="text-lg font-bold ml-auto">{pngDocuments.length}</p>{" "}
                         </div>
                       </div>
-                      <Progress value={pngDocuments.length / 100} />
+                      <Progress value={pngDocuments.length/100} />
                     </div>
                     {/* Bottom */}
                     <div

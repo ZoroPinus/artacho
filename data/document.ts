@@ -31,10 +31,10 @@ export const getAllDocuments = async () => {
   }
 };
 
-export const getAllDocumentsByMember = async (memberName:string) => {
+export const getAllDocumentsByMember = async (memberName: string) => {
   try {
     const document = await db.document.findMany({
-      where: {memberName:memberName},
+      where: { memberName: memberName },
       select: {
         id: true,
         memberName: true,

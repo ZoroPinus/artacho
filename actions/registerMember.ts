@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { MemberRegisterSchema } from "@/schemas";
 import { getUserByEmail, getUserByName } from "@/data/user";
 import { UserRole } from "@prisma/client";
-
+import bcrypt from "bcryptjs";
 export const registerMember = async (
   values: z.infer<typeof MemberRegisterSchema>
 ) => {
@@ -16,7 +16,7 @@ export const registerMember = async (
     return { error: "Invalid fields!" };
   }
 
-  const { name, email, phone, address, age, gender, id, idType } = validatedFields.data;
+  const { name, email, phone, address, age, gender, id, idType, password, confirmPassword } = validatedFields.data;
 
   const existingUser = await getUserByEmail(email);
   const existingUser2 = await getUserByName(name);
@@ -28,6 +28,12 @@ export const registerMember = async (
   if (existingUser2) {
     return { error: "Name already in use!" };
   }
+
+  if( password !== confirmPassword){
+    return { error: "Password does not match" };
+  } 
+
+  const hashedPassword = await bcrypt.hash(password, 10);
 
   // Generate a unique user ID based on the current date and role
   const userId = generateUserId();
@@ -43,7 +49,8 @@ export const registerMember = async (
       gender,
       role: UserRole.MEMBER,
       idType: idType,
-      idNo: id
+      idNo: id,
+      password: hashedPassword
     },
   });
 
