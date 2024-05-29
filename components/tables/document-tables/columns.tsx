@@ -5,6 +5,10 @@ import { CellAction } from "./cell-action";
 
 export const columns: ColumnDef<Document>[] = [
   {
+    accessorKey: "idNo",
+    header: "ID",
+  },
+  {
     accessorKey: "memberName",
     header: "Member Name",
   },

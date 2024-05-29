@@ -30,15 +30,31 @@ export const uploadDocument = async (
     fileTypes = "PNG";
   }
 
+  // Retrieve the latest idNo value from the document table
+  const latestDocument = await db.document.findFirst({
+    orderBy: { idNo: "desc" },
+  });
+
+  let idNo: string;
+
+  if (latestDocument) {
+    // Convert the retrieved idNo value to an integer, increment it by 1, and convert it back to a string
+    const latestIdNo = parseInt(latestDocument.idNo);
+    idNo = (latestIdNo + 1).toString().padStart(4, '0');
+  } else {
+    // If there are no existing documents, start with idNo "0001"
+    idNo = "0001";
+  }
+
+  // Create a new document with the incremented idNo value
   await db.document.create({
     data: {
+      idNo,
       memberName,
       fileName,
       description,
       fileUrl: fileUrl[0].fileUrl,
-      fileType: fileTypes === "PDF"
-        ? DocumentType.PDF
-        : DocumentType.PNG,
+      fileType: fileTypes === "PDF" ? DocumentType.PDF : DocumentType.PNG,
       adminId: userId!.id,
     },
   });
@@ -47,9 +63,10 @@ export const uploadDocument = async (
 };
 
 export const deleteDocument = async (documentId: string) => {
+  console.log(documentId)
   const document = await getDocumentById(documentId);
-  console.log(document)
   if (!document) {
+    console.log(document)
     return { error: "Document not found" };
   }
 

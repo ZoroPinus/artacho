@@ -30,6 +30,8 @@ import {
   UserX2Icon,
   BookText,
   X,
+  FilePlus,
+  ChevronDown
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -56,11 +58,13 @@ const UsersRound: React.FC<LucideProps> = (props) => (
 );
 export const Icons = {
   dashboard: LayoutDashboardIcon,
+  chevronDown: ChevronDown,
   logo: Command,
   login: LogIn,
   close: X,
   profile: User2Icon,
   document:BookText,
+  forms:FilePlus,
   members:UsersRound,
   spinner: Loader2,
   kanban: CircuitBoardIcon,

@@ -8,6 +8,7 @@ export interface NavItem {
   icon?: keyof typeof Icons;
   label?: string;
   description?: string;
+  items?: NavItem[];
 }
 
 export interface NavItemWithChildren extends NavItem {
@@ -24,6 +25,7 @@ export interface FooterItem {
     title: string;
     href: string;
     external?: boolean;
+    icon?: keyof typeof Icons;
   }[];
 }
 

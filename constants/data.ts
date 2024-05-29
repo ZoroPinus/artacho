@@ -46,6 +46,12 @@ export const navItemsAdmin: NavItem[] = [
     href: "/members",
     icon: "members",
     label: "members",
+  },
+  {
+    title: "Forms",
+    href: "/forms",
+    icon: "forms",
+    label: "forms",
   }
 ];
 
@@ -62,5 +68,22 @@ export const navItems: NavItem[] = [
     href: "/documents",
     icon: "document",
     label: "document",
-  }
+  },
+  {
+    title: "Forms",
+    icon: "forms",
+    label: "forms",
+    items: [
+      {
+        title: "Form 1",
+        href: "/forms/form1",
+        icon: "forms",
+      },
+      {
+        title: "Form 2",
+        href: "/forms/form2",
+        icon: "forms",
+      },
+    ],
+  },
 ];

@@ -1,8 +1,8 @@
 import { db } from "@/lib/db";
 
-export const getDocumentById = async (id: string) => {
+export const getDocumentById = async (docid: string) => {
   try {
-    const document = await db.document.findUnique({ where: { id } });
+    const document = await db.document.findUnique({ where: { id:docid } });
 
     return document;
   } catch {
@@ -15,6 +15,7 @@ export const getAllDocuments = async () => {
     const document = await db.document.findMany({
       select: {
         id: true,
+        idNo: true,
         memberName: true,
         fileName: true,
         description: true,
@@ -37,6 +38,7 @@ export const getAllDocumentsByMember = async (memberName: string) => {
       where: { memberName: memberName },
       select: {
         id: true,
+        idNo: true,
         memberName: true,
         fileName: true,
         description: true,

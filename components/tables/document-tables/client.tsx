@@ -50,7 +50,7 @@ export const DocumentClient: React.FC<DocumentProps> = ({
             )}
           </div>
           <Separator />
-          <DataTable searchKeys={["memberName", "fileName", "fileType", "description"]} columns={columns} data={data} />
+          <DataTable searchKeys={["idNo","memberName", "fileName", "fileType", "description"]} columns={columns} data={data} />
         </>
       )}
     </>

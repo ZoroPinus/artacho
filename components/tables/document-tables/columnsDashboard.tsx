@@ -4,6 +4,10 @@ import { Document } from "@/constants/data";
 
 export const columnsDashboard: ColumnDef<Document>[] = [
   {
+    accessorKey: "idNo",
+    header: "ID",
+  },
+  {
     accessorKey: "fileName",
     header: "File Name",
   },

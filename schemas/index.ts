@@ -73,3 +73,100 @@ export const UploadSchema = z.object({
     .min(1, { message: "At least one file must be added." }),
   fileType: z.string().min(1, { message: "Please select a category" }),
 });
+
+
+export const CertificateSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  barangay: z.string().min(1, {
+    message: "Barangay is required",
+  }),
+  date: z.string(),
+  day: z.string().min(1, { message: "Day must be at least 1 digits" }),
+  month: z.string()
+});
+
+export const FinancialStatementSchema = z.object({
+  date: z.string().min(1, {
+    message: "Date is required",
+  }),
+  total: z.string(),
+  tithesTotal: z.string(),
+  thanksgivingOfferingTotal: z.string(),
+  birthdayOfferingTotal: z.string(),
+  looseOfferingsTotal: z.string(),
+  sundayschoolOfferingTotal: z.string(),
+  adultsundayOfferingTotal: z.string(),
+  childrensundayOfferingTotal: z.string(),
+  tithes: z.array(
+    z.object({
+      title: z.string(),
+      amount: z.string(),
+    })
+  ),
+  thanksgivingOffering: z.array(
+    z.object({
+      title: z.string(),
+      amount: z.string(),
+    })
+  ),
+  birthdayOffering: z.array(
+    z.object({
+      title: z.string(),
+      amount: z.string(),
+    })
+  ),
+  others: z.array(
+    z.object({
+      title: z.string(),
+      amount: z.string(),
+    })
+  ),
+  summary: z.array(
+    z.object({
+      title: z.string(),
+      amount: z.string(),
+    })
+  )
+});
+
+
+
+export const BaptismCertificateSchema = z.object({
+  name: z.string().min(1, {
+    message: "Name is required",
+  }),
+  pastorInCharge: z.string().min(1, {
+    message: "Name is required",
+  }),
+  father: z.string().min(1, {
+    message: "Father's name is required",
+  }),
+  mother: z.string().min(1, {
+    message: "Mother's name is required",
+  }),
+  baptismDate: z.string().min(1, {
+    message: "Baptism date is required",
+  }),
+  baptizedBy: z.string().min(1, {
+    message: "Name of the person who performed the baptism is required",
+  }),
+  sponsors: z.array(z.string().min(1, {
+    message: "Sponsor name is required",
+  })).nonempty({
+    message: "At least one sponsor is required",
+  }),
+  birthDate: z.string().min(1, {
+    message: "Birth date is required",
+  }),
+  birthPlace: z.string().min(1, {
+    message: "Birth place is required",
+  }),
+  day: z.string().min(1, {
+    message: "Day must be at least 1 digit",
+  }),
+  month: z.string().min(1, {
+    message: "Month is required",
+  }),
+});
