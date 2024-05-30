@@ -170,3 +170,12 @@ export const BaptismCertificateSchema = z.object({
     message: "Month is required",
   }),
 });
+
+export const EncryptionSchema = z.object({
+  fileUrl: z.string().min(1, {
+    message: "File URL is required",
+  }),
+  password: z.string().min(1, {
+    message: "Barangay is required",
+  })
+});

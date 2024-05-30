@@ -31,7 +31,7 @@ model User {
   name          String?   @unique
   email         String?   @unique
   idType        String?
-  idNo          String?      
+  idNo          String?
   emailVerified DateTime?
   image         String?
   password      String?
@@ -39,6 +39,7 @@ model User {
   address       String?
   phone         String?
   age           Int?
+  loggedInAt    DateTime?
   role          UserRole  @default(MEMBER)
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @default(now()) @updatedAt @map("updated_at")
@@ -46,7 +47,7 @@ model User {
 
 model Document {
   id          String       @id @default(cuid()) @map("_id")
-  idNo        String       
+  idNo        String
   memberName  String
   fileName    String
   description String?
@@ -56,9 +57,8 @@ model Document {
   uploadedAt  DateTime     @default(now()) @map("uploaded_at")
 }
 
-
 model Certificate {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   barangay String
   date     String
@@ -67,81 +67,81 @@ model Certificate {
 }
 
 model FinancialStatement {
-  id                        String               @id @default(auto()) @map("_id") @db.ObjectId
-  date                      String
-  total                     String
-  tithesTotal               String
-  thanksgivingOfferingTotal String
-  birthdayOfferingTotal     String
-  looseOfferingsTotal       String
-  sundayschoolOfferingTotal String
-  adultsundayOfferingTotal  String
+  id                          String                 @id @default(auto()) @map("_id") @db.ObjectId
+  date                        String
+  total                       String
+  tithesTotal                 String
+  thanksgivingOfferingTotal   String
+  birthdayOfferingTotal       String
+  looseOfferingsTotal         String
+  sundayschoolOfferingTotal   String
+  adultsundayOfferingTotal    String
   childrensundayOfferingTotal String
-  tithes                    Tithes[]
-  thanksgivingOffering      ThanksgivingOffering[]
-  birthdayOffering          BirthdayOffering[]
-  others                    Other[]
-  summary                   Summary[]
+  tithes                      Tithes[]
+  thanksgivingOffering        ThanksgivingOffering[]
+  birthdayOffering            BirthdayOffering[]
+  others                      Other[]
+  summary                     Summary[]
 }
 
 model Tithes {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  title               String
-  amount              String
-  financialStatement  FinancialStatement? @relation(fields: [financialStatementId], references: [id])
-  financialStatementId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  amount               String
+  financialStatement   FinancialStatement? @relation(fields: [financialStatementId], references: [id])
+  financialStatementId String              @db.ObjectId
 }
 
 model ThanksgivingOffering {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  title               String
-  amount              String
-  financialStatement  FinancialStatement? @relation(fields: [financialStatementId], references: [id])
-  financialStatementId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  amount               String
+  financialStatement   FinancialStatement? @relation(fields: [financialStatementId], references: [id])
+  financialStatementId String              @db.ObjectId
 }
 
 model BirthdayOffering {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  title               String
-  amount              String
-  financialStatement  FinancialStatement? @relation(fields: [financialStatementId], references: [id])
-  financialStatementId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  amount               String
+  financialStatement   FinancialStatement? @relation(fields: [financialStatementId], references: [id])
+  financialStatementId String              @db.ObjectId
 }
 
 model Other {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  title               String
-  amount              String
-  financialStatement  FinancialStatement? @relation(fields: [financialStatementId], references: [id])
-  financialStatementId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  amount               String
+  financialStatement   FinancialStatement? @relation(fields: [financialStatementId], references: [id])
+  financialStatementId String              @db.ObjectId
 }
 
 model Summary {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  title               String
-  amount              String
-  financialStatement  FinancialStatement? @relation(fields: [financialStatementId], references: [id])
-  financialStatementId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  title                String
+  amount               String
+  financialStatement   FinancialStatement? @relation(fields: [financialStatementId], references: [id])
+  financialStatementId String              @db.ObjectId
 }
 
 model BaptismCertificate {
-  id              String    @id @default(auto()) @map("_id") @db.ObjectId
-  name            String
-  pastorInCharge  String
-  father          String
-  mother          String
-  baptismDate     String
-  baptizedBy      String
-  birthDate       String
-  birthPlace      String
-  day             String
-  month           String
-  sponsors        Sponsor[]
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  pastorInCharge String
+  father         String
+  mother         String
+  baptismDate    String
+  baptizedBy     String
+  birthDate      String
+  birthPlace     String
+  day            String
+  month          String
+  sponsors       Sponsor[]
 }
 
 model Sponsor {
-  id                  String              @id @default(auto()) @map("_id") @db.ObjectId
-  name                String
-  baptismCertificate  BaptismCertificate? @relation(fields: [baptismCertificateId], references: [id])
-  baptismCertificateId String             @db.ObjectId
+  id                   String              @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String
+  baptismCertificate   BaptismCertificate? @relation(fields: [baptismCertificateId], references: [id])
+  baptismCertificateId String              @db.ObjectId
 }

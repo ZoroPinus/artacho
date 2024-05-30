@@ -8,7 +8,6 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "NAME",
-    
   },
   {
     accessorKey: "email",
@@ -47,7 +46,10 @@ export const columns: ColumnDef<User>[] = [
   {
     accessorKey: "role",
     header: "ROLE",
-    
+  },
+  {
+    accessorKey: "loggedInAt",
+    header: "Last Logged In",
   },
   {
     id: "actions",
