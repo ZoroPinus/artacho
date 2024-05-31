@@ -48,7 +48,8 @@ const DashboardPage = () => {
   const getAdminCount = async () => {
     admin().then((res) => {
       // @ts-ignore
-      setAdminCount(res);
+      const adminCount = res.length
+      setAdminCount(adminCount);
       
     });
   };
@@ -125,7 +126,7 @@ const DashboardPage = () => {
               <div className="overflow-y-auto col-span-3">
                 {/* CARDS */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
-                  <Card>
+                  <Card onClick={() => router.push(`/members`)}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
                         Members
@@ -150,7 +151,7 @@ const DashboardPage = () => {
                       <div className="text-2xl font-bold">{totalMembers}</div>
                     </CardContent>
                   </Card>
-                  <Card>
+                  <Card onClick={() => router.push(`/members`)}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
                         Male Members
@@ -175,7 +176,7 @@ const DashboardPage = () => {
                       <div className="text-2xl font-bold">{maleCount}</div>
                     </CardContent>
                   </Card>
-                  <Card>
+                  <Card onClick={() => router.push(`/members`)}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
                         Female Members
@@ -202,7 +203,7 @@ const DashboardPage = () => {
                   </Card>
                   {session!.user!.role! == UserRole.ADMIN ? (
                     <>
-                      <Card>
+                      <Card onClick={() => router.push(`/admins`)}>
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                           <CardTitle className="text-sm font-medium">
                             Admin Members
@@ -228,7 +229,7 @@ const DashboardPage = () => {
                   ) : (
                     <></>
                   )}
-                  <Card>
+                  <Card onClick={() => router.push(`/documents`)}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                       <CardTitle className="text-sm font-medium">
                         Total Documents Saved

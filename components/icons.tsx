@@ -31,7 +31,8 @@ import {
   BookText,
   X,
   FilePlus,
-  ChevronDown
+  ChevronDown,
+  Shield
 } from "lucide-react";
 
 export type Icon = LucideIcon;
@@ -60,6 +61,7 @@ export const Icons = {
   dashboard: LayoutDashboardIcon,
   chevronDown: ChevronDown,
   logo: Command,
+  admins: Shield,
   login: LogIn,
   close: X,
   profile: User2Icon,

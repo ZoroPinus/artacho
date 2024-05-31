@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Document } from "@/constants/data";
-import { Edit, MoreHorizontal, Trash, Download } from "lucide-react";
+import { Edit, MoreHorizontal, Trash, Download, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
@@ -50,6 +50,10 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     }
   };
   
+
+  const handleView =()=>{
+    window.open(data.fileUrl, "_blank");
+  }
   const onDelete = async () => {
     // const res = await deleteDocument(data.id);
     // console.log(data.id)
@@ -84,6 +88,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => handleView()}>
+            <View className="mr-2 h-4 w-4" /> View
+          </DropdownMenuItem>
           <DropdownMenuItem onClick={() => handleDownload()}>
             <Download className="mr-2 h-4 w-4" /> Download
           </DropdownMenuItem>

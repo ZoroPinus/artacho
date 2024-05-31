@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Document } from "@/constants/data";
 export default function MemberPage() {
   const params = useParams()
-  const breadcrumbItems = [{ title: "Document", link: "/dashboard/document/" }];
+  const breadcrumbItems = [{ title: "Members", link: "/members" }];
   const id = Array.isArray(params.id) ? decodeURIComponent(params.id[0]) : decodeURIComponent(params.id); 
 
   const [data, setDocuments] = useState<Document[]>([]);

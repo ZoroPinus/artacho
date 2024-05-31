@@ -43,12 +43,11 @@ export const deleteUser = async (id: string) => {
 
 export const admin = async () => {
   const fetchAdmins = await getAllAdmin();
-  const adminCount = fetchAdmins!.length;
   if (fetchAdmins == null) {
     return { error: "No Result" };
   }
 
-  return adminCount
+  return fetchAdmins
 };
 
 

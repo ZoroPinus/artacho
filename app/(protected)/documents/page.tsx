@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { Document } from "@/constants/data";
 import { UserRole } from "@prisma/client";
 import { useSession } from "next-auth/react";
-const breadcrumbItems = [{ title: "Document", link: "/dashboard/document" }];
+const breadcrumbItems = [{ title: "Documents", link: "/documents" }];
 export default function DocumentsPage() {
   const { data: session } = useSession();
   const [data, setDocuments] = useState<Document[]>([]);

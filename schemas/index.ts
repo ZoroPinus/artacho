@@ -26,11 +26,20 @@ export const MemberRegisterSchema = z.object({
   name: z.string().min(1, {
     message: "Name is required",
   }),
+  father: z.string().min(1, {
+    message: "Name is required",
+  }),
+  mother: z.string().min(1, {
+    message: "Name is required",
+  }),
   email: z.string().email({
     message: "Email is required",
   }),
   phone: z.string().min(11, { message: "Phone must be at least 11 digits" }),
-  address: z.string(),
+  barangay: z.string(),
+  cityState: z.string(),
+  dob: z.string(),
+  province: z.string(),
   age: z.coerce.number().min(2, { message: "Please input your age" }),
   gender: z.string().min(1, { message: "Please select a gender" }),
   idType: z.string().min(1, { message: "Please select an ID type" }),
@@ -82,9 +91,7 @@ export const CertificateSchema = z.object({
   barangay: z.string().min(1, {
     message: "Barangay is required",
   }),
-  date: z.string(),
-  day: z.string().min(1, { message: "Day must be at least 1 digits" }),
-  month: z.string()
+  date: z.string()
 });
 
 export const FinancialStatementSchema = z.object({
@@ -162,13 +169,7 @@ export const BaptismCertificateSchema = z.object({
   }),
   birthPlace: z.string().min(1, {
     message: "Birth place is required",
-  }),
-  day: z.string().min(1, {
-    message: "Day must be at least 1 digit",
-  }),
-  month: z.string().min(1, {
-    message: "Month is required",
-  }),
+  })
 });
 
 export const EncryptionSchema = z.object({

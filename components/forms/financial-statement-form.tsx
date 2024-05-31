@@ -142,27 +142,64 @@ export default function FinancialStatementForm() {
 
   const renderOfferingInputs = (type: string) => {
     return offerings[type].map((item, index) => (
-      <div key={index} className="grid grid-cols-2 gap-4 mb-4">
-        <input
-          type="text"
-          placeholder="Title"
-          value={item.title}
-          onChange={(e) =>
-            handleOfferingChange(type, index, "title", e.target.value)
-          }
-          className="border-b border-black text-center mx-1 w-full"
-        />
-        <input
-          type="number"
-          placeholder="Amount"
-          value={item.amount}
-          onChange={(e) =>
-            handleOfferingChange(type, index, "amount", e.target.value)
-          }
-          className="border-b border-black text-center mx-1 w-full"
-        />
+      <div className="w-full">
+        <div key={index} className="grid grid-cols-2 gap-4 mb-4">
+          <input
+            type="text"
+            placeholder="Title"
+            value={item.title}
+            onChange={(e) =>
+              handleOfferingChange(type, index, "title", e.target.value)
+            }
+            className="border-b border-black text-center mx-1 w-full"
+          />
+          <input
+            type="number"
+            placeholder="Amount"
+            value={item.amount}
+            onChange={(e) =>
+              handleOfferingChange(type, index, "amount", e.target.value)
+            }
+            className="border-b border-black text-center mx-1 w-full"
+          />
+        </div>
+        {index === offerings[type].length - 1 && (
+          <div className="flex flex-row justify-center items-center gap-10 p-2">
+            <button
+              onClick={() => handleAddOfferingInput(type)}
+              className="border border-black rounded-md py-1 px-3 bg-blue-500 text-white font-semibold hover:bg-blue-600"
+            >
+              Add
+            </button>
+            {offerings[type].length > 1 && (
+              <button
+                onClick={() => handleRemoveOfferingInput(type, index)}
+                className="border border-black rounded-md py-1 px-3 bg-red-500 text-white font-semibold hover:bg-red-600"
+              >
+                Remove
+              </button>
+            )}
+          </div>
+        )}
       </div>
     ));
+  };
+
+  const handleRemoveOfferingInput = (type: string, index: number) => {
+    const updatedOfferings = { ...offerings };
+    updatedOfferings[type] = updatedOfferings[type].filter(
+      (_, idx) => idx !== index
+    );
+    setOfferings(updatedOfferings);
+  };
+
+  const handleAddOfferingInput = (type: string) => {
+    const updatedOfferings = { ...offerings };
+    updatedOfferings[type] = [
+      ...updatedOfferings[type],
+      { title: "", amount: "" },
+    ];
+    setOfferings(updatedOfferings);
   };
 
   const renderTotalAmount = (type: string) => {
@@ -225,11 +262,11 @@ export default function FinancialStatementForm() {
           <h1 className="text-xl font-semibold">
             UNITED CHURCH OF CHRIST IN THE PHILIPPINES
           </h1>
-          <p className="text-md font-semibold italic">
-            North Central Luzon Conference-Parish 1
+          <p className="text-md text-center font-semibold italic">
+            Local Church UCCP-Artacho
           </p>
-          <p className="text-md font-semibold italic">
-            Artacho, Sison, Pangasinan
+          <p className="text-md text-center font-semibold italic">
+            Sison, Pangasinan
           </p>
         </div>
       </div>
@@ -251,7 +288,7 @@ export default function FinancialStatementForm() {
             render={({ field }) => (
               <input
                 {...field}
-                type="text"
+                type="date"
                 className="border-b border-black text-center mx-2 w-full"
               />
             )}
@@ -447,7 +484,7 @@ export default function FinancialStatementForm() {
         </div>
         {!isGeneratingPdf && (
           <Button type="submit" className="w-full">
-            Submit
+            Save
           </Button>
         )}
         <FormError message={error} />

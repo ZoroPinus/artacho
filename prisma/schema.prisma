@@ -34,10 +34,13 @@ model User {
   idNo          String?
   emailVerified DateTime?
   image         String?
+  father         String?
+  mother         String?
   password      String?
   gender        String?
   address       String?
   phone         String?
+  dob           DateTime?
   age           Int?
   loggedInAt    DateTime?
   role          UserRole  @default(MEMBER)
@@ -58,12 +61,10 @@ model Document {
 }
 
 model Certificate {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   barangay String
-  date     String
-  day      String
-  month    String
+  date     DateTime @default(now()) @map("uploaded_at")
 }
 
 model FinancialStatement {
@@ -134,8 +135,7 @@ model BaptismCertificate {
   baptizedBy     String
   birthDate      String
   birthPlace     String
-  day            String
-  month          String
+  date           DateTime  @default(now()) @map("uploaded_at")
   sponsors       Sponsor[]
 }
 

@@ -48,6 +48,12 @@ export const navItemsAdmin: NavItem[] = [
     label: "members",
   },
   {
+    title: "Admins",
+    href: "/admins",
+    icon: "admins",
+    label: "admins",
+  },
+  {
     title: "Forms",
     href: "/forms",
     icon: "forms",

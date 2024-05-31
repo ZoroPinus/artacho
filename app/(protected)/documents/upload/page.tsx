@@ -7,8 +7,8 @@ import { DocumentType } from "@prisma/client";
 
 export default function DocumentUploadPage() {
   const breadcrumbItems = [
-    { title: "Documents", link: "/dashboard/documents" },
-    { title: "Upload", link: "/dashboard/documents/upload" },
+    { title: "Documents", link: "/documents" },
+    { title: "Upload", link: "/documents/upload" },
   ];
   
   return (

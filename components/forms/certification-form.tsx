@@ -7,12 +7,14 @@ import Image from "next/image";
 import { cn } from "@/lib/utils";
 import { Poppins } from "next/font/google";
 import { CertificateSchema } from "@/schemas";
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { uploadCertificate } from "@/actions/forms";
 import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { User } from "@prisma/client";
+import { members } from "@/actions/members";
 const font = Poppins({
   subsets: ["latin"],
   weight: ["600"],
@@ -24,14 +26,13 @@ export default function CertificationForm() {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormData>({
     resolver: zodResolver(CertificateSchema),
     defaultValues: {
       name: "",
       barangay: "",
-      day: "",
-      month: "",
       date: "",
     },
   });
@@ -39,14 +40,34 @@ export default function CertificationForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
+  const [query, setQuery] = useState("");
+  const [names, setNames] = useState<User[]>([]);
+  const d = new Date();
+  const year = d.getFullYear();
+  const day = getDayWithSuffix(d);
+  function getDayWithSuffix(date: any) {
+    const day = date.getDate();
+    let suffix = "th";
+
+    if (day === 1 || day === 21 || day === 31) {
+      suffix = "st";
+    } else if (day === 2 || day === 22) {
+      suffix = "nd";
+    } else if (day === 3 || day === 23) {
+      suffix = "rd";
+    }
+
+    return `${day}${suffix}`;
+  }
+  const month = d.toLocaleString("default", { month: "long" });
   const onSubmit = async (data: FormData) => {
-    setIsGeneratingPdf(true)
+    setIsGeneratingPdf(true);
     setError("");
     setSuccess("");
     startTransition(() => {
       uploadCertificate(data).then((data) => {
         if (data?.success) {
-          createPDF()
+          createPDF();
           setSuccess(data?.success);
         } else {
           setError(data?.error);
@@ -54,23 +75,39 @@ export default function CertificationForm() {
       });
     });
   };
-  const createPDF = async () => {   
-    const pdf = new jsPDF("portrait", "pt", "a4"); 
+  const createPDF = async () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
     const data = await html2canvas(document.querySelector("#certificate")!);
-    const img = data.toDataURL("image/png");  
+    const img = data.toDataURL("image/png");
     const imgProperties = pdf.getImageProperties(img);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
-    pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.addImage(img, "PNG", 15, 40, pdfWidth, pdfHeight);
     pdf.save("certificate.pdf");
-    setIsGeneratingPdf(false)
-    
+    setIsGeneratingPdf(false);
   };
+  useEffect(() => {
+    if (query.length > 0) {
+      const fetchNames = async () => {
+        const users = await members();
+        // @ts-ignore
+        setNames(users);
+      };
+
+      fetchNames();
+    } else {
+      setNames([]);
+    }
+  }, [query]);
+
   return (
-    <div id="certificate" className="w-full h-full flex flex-col items-center justify-center">
+    <div
+      id="certificate"
+      className="w-full h-full flex flex-col items-center justify-center"
+    >
       {/* Header Start */}
       <div className="flex items-center justify-center mb-6">
-        <div className="relative w-16 h-16 mr-3">
+        <div className="relative w-20 h-20 mr-3">
           <Image
             src="https://utfs.io/f/d3fdfc03-cf46-467b-86e5-613e6a6e7acf-2a.png"
             alt="School Logo"
@@ -78,38 +115,75 @@ export default function CertificationForm() {
             className="rounded-full"
           />
         </div>
-        <div className="text-center">
-          <h1 className={cn("text-3xl font-semibold", font.className)}>
+        <div className="text-left">
+          <h1 className="text-xl font-semibold">
             UNITED CHURCH OF CHRIST IN THE PHILIPPINES
           </h1>
-          <p className={cn("text-md font-semibold", font.className)}>
-            Poblacion, San Gabriel, La Union
+          <p className="text-md text-center font-semibold italic">
+            Local Church UCCP-Artacho
+          </p>
+          <p className="text-md text-center font-semibold italic">
+            Sison, Pangasinan
           </p>
         </div>
       </div>
+      <div className="flex items-center justify-center mb-6">
+        <h1 className="text-3xl font-semibold text-center tracking-wide">
+          CERTIFICATION
+        </h1>
+      </div>
       {/* Header End */}
-
-      <h1 className="text-3xl font-semibold text-center mb-6">CERTIFICATION</h1>
 
       <form
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-4 flex-grow overflow-y-auto max-w-lg text-center"
       >
         <p className="text-justify indent-8">
-          This is to certify that
-          <Controller
-            name="name"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="text"
-                placeholder="Name"
-                className="border-b border-black text-center mx-2"
-              />
-            )}
-          />
-          , of Barangay
+          <div className="flex items-center">
+            This is to certify that
+            <Controller
+              name="name"
+              control={control}
+              render={({ field }) => (
+                <div className="relative">
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder="Name"
+                    className="border-b border-black text-center mx-1 "
+                    onChange={(e) => {
+                      field.onChange(e);
+                      setQuery(e.target.value);
+                    }}
+                    value={query}
+                  />
+                  {names.length > 0 && (
+                    <ul className="absolute left-0 right-0 mt-1 bg-white border border-gray-300 z-10">
+                      {names.map((name) => (
+                        <li
+                          key={name.id}
+                          className="p-2 cursor-pointer hover:bg-gray-200"
+                          onClick={() => {
+                            field.onChange(name.name);
+                            setQuery(name.name!);
+                            setNames([]);
+                            // Extracting barangay from the selected user's address
+                            const addressArray = name.address!.split(","); // Assuming address format is comma-separated
+                            const barangay = addressArray[0]; // Assuming barangay is the second element in the address
+                            setValue("barangay", barangay);
+                          }}
+                        >
+                          {name.name}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              )}
+            />
+            ,
+          </div>
+          of Barangay
           <Controller
             name="barangay"
             control={control}
@@ -118,7 +192,7 @@ export default function CertificationForm() {
                 {...field}
                 type="text"
                 placeholder="Barangay"
-                className="border-b border-black text-center mx-2"
+                className="border-b border-black text-center mx-2 p-1"
               />
             )}
           />
@@ -132,46 +206,22 @@ export default function CertificationForm() {
         </p>
 
         <p className="text-justify indent-8">
-          Issued this
-          <Controller
-            name="day"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="text"
-                placeholder="Day"
-                className="border-b border-black text-center mx-1"
-              />
-            )}
-          />{" "}
-          day of
-          <Controller
-            name="month"
-            control={control}
-            render={({ field }) => (
-              <input
-                {...field}
-                type="text"
-                placeholder="Month"
-                className="border-b border-black text-center mx-2"
-              />
-            )}
-          />
-          , 2024 at United Church of Christ in the Philippines - Poblacion, San
-          Gabriel, La Union.
+          Issued this {day} day of {month}, {year} at United Church of Christ in the Philippines -
+          Poblacion, San Gabriel, La Union.
         </p>
 
         {/* Submit Button */}
 
         {/* Footer */}
-        <div className="text-right mt-auto">
+        <div className="text-right mt-auto pb-4">
           <p className="font-bold text-xl">REV. ARNEL B. PICAR</p>
-          <p>Pastor-in-Charge, UCCP, San Gabriel, LU</p>
+          <p className="pb-3">
+            Pastor-in-Charge, UCCP-Artacho, Sison, Pangasinan
+          </p>
         </div>
         {!isGeneratingPdf && (
           <Button type="submit" className="w-full">
-            Submit
+            Save
           </Button>
         )}
         <FormError message={error} />

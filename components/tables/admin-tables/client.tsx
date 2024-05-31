@@ -28,33 +28,18 @@ export const UserClient: React.FC<ProductsClientProps> = ({
 
   return (
     <>
-      {isDashboard ? (
-        <DataTableUserDashboard columns={columns} data={data} />
-      ) : (
-        <>
-          <div className="flex items-start justify-between">
-            <Heading
-              title={`Members (${data.length})`}
-              description="Manage current users "
-            />
-
-            {UserRole.ADMIN ? (
-              <>
-                <Button
-                  className="text-xs md:text-sm"
-                  onClick={() => router.push(`/members/create`)}
-                >
-                  <Plus className="mr-2 h-4 w-4" /> Add New
-                </Button>
-              </>
-            ) : (
-              <></>
-            )}
-          </div>
-          <Separator />
-          <DataTable searchKeys={["email", "idNo", "name", "phone"]} columns={columns} data={data} />
-        </>
-      )}
+      <div className="flex items-start justify-between">
+        <Heading
+          title={`Admins (${data.length})`}
+          description="Manage current admins "
+        />
+      </div>
+      <Separator />
+      <DataTable
+        searchKeys={["email", "name", "phone"]}
+        columns={columns}
+        data={data}
+      />
     </>
   );
 };

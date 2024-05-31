@@ -4,8 +4,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function UserCreatePage() {
   const breadcrumbItems = [
-    { title: "Member", link: "/dashboard/members" },
-    { title: "Create", link: "/dashboard/members/create" },
+    { title: "Member", link: "/members" },
+    { title: "Create", link: "/members/create" },
   ];
 
   return (

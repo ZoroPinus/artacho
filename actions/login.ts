@@ -8,6 +8,7 @@ import { LoginSchema } from "@/schemas";
 import { getUserByEmail } from "@/data/user";
 import { DEFAULT_LOGIN_REDIRECT } from "@/routes";
 import { db } from "@/lib/db";
+import { format } from "date-fns";
 export const login = async (
   values: z.infer<typeof LoginSchema>,
   callbackUrl?: string | null
@@ -31,10 +32,6 @@ export const login = async (
       email,
       password,
       redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
-    });
-    await db.user.update({
-      where: { email: email },
-      data: { loggedInAt: new Date() }
     });
     return { success: "Login Successful" };
   } catch (error) {

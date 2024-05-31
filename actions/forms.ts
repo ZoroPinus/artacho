@@ -19,16 +19,12 @@ export const uploadCertificate = async (
     return { error: "Invalid fields!" };
   }
 
-  const { name, barangay, day, month } = validatedFields.data;
+  const { name, barangay } = validatedFields.data;
 
-  const date = Date();
   await db.certificate.create({
     data: {
       name,
-      barangay,
-      date:date,
-      day,
-      month,
+      barangay
     },
   });
 
@@ -100,8 +96,6 @@ export const uploadBaptismCertificate = async (
     baptizedBy,
     birthDate,
     birthPlace,
-    day,
-    month,
     sponsors,
   } = validatedFields.data;
 
@@ -115,8 +109,6 @@ export const uploadBaptismCertificate = async (
       baptizedBy,
       birthDate,
       birthPlace,
-      day,
-      month,
       sponsors: {
         create: sponsors.map((sponsor: string) => ({ name: sponsor })),
       },

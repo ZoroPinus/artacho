@@ -24,13 +24,18 @@ import { FormSuccess } from "@/components/form-success";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 
 import { MemberRegisterSchema } from "@/schemas";
 import { registerMember } from "@/actions/registerMember";
 import { useSearchParams } from "next/navigation";
+import { fetchBarangays, fetchCities, fetchProvinces } from "@/lib/locations";
 
+interface Option {
+  label: string;
+  value: string;
+}
 export const MemberRegistrationForm = () => {
   const searchParams = useSearchParams();
   const urlError =
@@ -60,12 +65,32 @@ export const MemberRegistrationForm = () => {
       name: undefined,
       email: undefined,
       phone: undefined,
-      address: undefined,
+      barangay: undefined,
+      cityState: undefined,
+      province: undefined,
       gender: undefined,
       id: undefined,
       idType: undefined,
+      dob: undefined,
     },
   });
+
+  const [provinceOptions, setProvinceOptions] = useState<Option[]>([]);
+  const [cityOptions, setCityOptions] = useState<Option[]>([]);
+  const [barangayOptions, setBarangayOptions] = useState<Option[]>([]);
+
+  useEffect(() => {
+    const loadProvinces = async () => {
+      const provinces = await fetchProvinces();
+      setProvinceOptions(
+        provinces.map((province: any) => ({
+          label: province.name,
+          value: province.code,
+        }))
+      );
+    };
+    loadProvinces();
+  }, []);
 
   const onSubmit = (values: z.infer<typeof MemberRegisterSchema>) => {
     setError("");
@@ -78,6 +103,45 @@ export const MemberRegistrationForm = () => {
       });
     });
   };
+
+  const selectedProvince = form.watch("province");
+  const selectedCity = form.watch("cityState");
+
+  useEffect(() => {
+    if (selectedProvince) {
+      const loadCities = async () => {
+        const cities = await fetchCities(selectedProvince);
+        setCityOptions(
+          cities.map((city: any) => ({ label: city.name, value: city.code, }))
+        );
+        setBarangayOptions([]);
+        form.setValue("cityState", "");
+        form.setValue("barangay", "");
+      };
+      loadCities();
+    } else {
+      setCityOptions([]);
+      setBarangayOptions([]);
+    }
+  }, [selectedProvince]);
+
+  useEffect(() => {
+    if (selectedCity) {
+      const loadBarangays = async () => {
+        const barangays = await fetchBarangays(selectedCity);
+        setBarangayOptions(
+          barangays.map((barangay: any) => ({
+            label: barangay.name,
+            value: barangay.code,
+          }))
+        );
+        form.setValue("barangay", "");
+      };
+      loadBarangays();
+    } else {
+      setBarangayOptions([]);
+    }
+  }, [selectedCity]);
 
   return (
     <>
@@ -130,6 +194,7 @@ export const MemberRegistrationForm = () => {
                   <FormLabel>Phone Number</FormLabel>
                   <FormControl>
                     <Input
+                      type="number"
                       placeholder="Enter your phone number..."
                       disabled={isPending}
                       {...field}
@@ -160,7 +225,7 @@ export const MemberRegistrationForm = () => {
                         />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent>
+                    <SelectContent className="max-h-40 overflow-y-auto">
                       {/* @ts-ignore  */}
                       {genderCategories.map((category) => (
                         <SelectItem key={category._id} value={category._id}>
@@ -169,6 +234,44 @@ export const MemberRegistrationForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+           
+            <FormField
+              control={form.control}
+              name="mother"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name of Mother</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your Name of Mother..."
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+           
+            <FormField
+              control={form.control}
+              name="father"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name of Father</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter your Name of Father..."
+                      disabled={isPending}
+                      {...field}
+                    />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -193,18 +296,116 @@ export const MemberRegistrationForm = () => {
             />
             <FormField
               control={form.control}
-              name="address"
+              name="dob"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Address</FormLabel>
+                  <FormLabel>Date of Birth</FormLabel>
                   <FormControl>
                     <Input
-                      type="address"
-                      placeholder="Enter your address..."
+                      type="date"
+                      placeholder="Enter your Birthday..."
                       disabled={isPending}
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="province"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Province</FormLabel>
+                  <Select
+                    disabled={isPending}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select Province"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-40 overflow-y-auto">
+                      {provinceOptions.map((province) => (
+                        <SelectItem key={province.value} value={province.value}>
+                          {province.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="cityState"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>City/Municipality</FormLabel>
+                  <Select
+                    disabled={isPending || !selectedProvince}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select City/Municipality"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-40 overflow-y-auto">
+                      {cityOptions.map((city) => (
+                        <SelectItem key={city.value} value={city.value}>
+                          {city.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="barangay"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Barangay</FormLabel>
+                  <Select
+                    disabled={isPending || !selectedCity}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="Select Barangay"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="max-h-40 overflow-y-auto">
+                      {barangayOptions.map((barangay) => (
+                        <SelectItem key={barangay.value} value={barangay.value}>
+                          {barangay.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
