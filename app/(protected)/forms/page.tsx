@@ -84,9 +84,9 @@ const FormsPage = () => {
                       </CardTitle>
                       <FilePlus2 size={48}/>
                     </CardHeader>
-                    <CardContent>
+                    {/* <CardContent>
                       <div className="text-2xl font-medium">Total Certifications Created: {certificationCount}</div>
-                    </CardContent>
+                    </CardContent> */}
                   </Card>
                   <Card className="h-72 flex justify-center flex-col items-left" onClick={() => handleOpenModal("baptism")}>
                     <CardHeader className="flex flex-row items-center  justify-between space-y-0 pb-2">
@@ -95,9 +95,9 @@ const FormsPage = () => {
                       </CardTitle>
                       <FilePlus2 size={48}/>
                     </CardHeader>
-                    <CardContent>
+                    {/* <CardContent>
                       <div className="text-2xl font-medium">Total Certificate of Baptism Created: {baptismCount}</div>
-                    </CardContent>
+                    </CardContent> */}
                   </Card>
                   <Card className="h-72 flex justify-center flex-col items-left" onClick={() => handleOpenModal("financial")}>
                     <CardHeader className="flex flex-row items-center  justify-between space-y-0 pb-2">
@@ -106,9 +106,9 @@ const FormsPage = () => {
                       </CardTitle>
                       <FilePlus2 size={48}/>
                     </CardHeader>
-                    <CardContent>
+                    {/* <CardContent>
                       <div className="text-2xl font-medium">Total Financial Statement Created: {financialCount}</div>
-                    </CardContent>
+                    </CardContent> */}
                   </Card>
                 </div>
               </div>

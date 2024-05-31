@@ -43,14 +43,14 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "idNo",
     header: "ID NUMBER",
   },
-  {
-    accessorKey: "role",
-    header: "ROLE",
-  },
-  {
-    accessorKey: "loggedInAt",
-    header: "Last Logged In",
-  },
+  // {
+  //   accessorKey: "role",
+  //   header: "ROLE",
+  // },
+  // {
+  //   accessorKey: "loggedInAt",
+  //   header: "Last Logged In",
+  // },
   {
     id: "actions",
     cell: ({ row }) => <CellAction data={row.original} />,
