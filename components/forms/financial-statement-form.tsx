@@ -55,7 +55,7 @@ export default function FinancialStatementForm() {
       summary: initialItemsState,
     },
   });
-
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [offerings, setOfferings] = useState<{ [key: string]: Item[] }>({
     tithes: initialItemsState,
     thanksgivingOffering: initialItemsState,
@@ -178,12 +178,13 @@ export default function FinancialStatementForm() {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const onSubmit = async (data: FormData) => {
+    setIsGeneratingPdf(true);
     setError("");
     setSuccess("");
     startTransition(() => {
       uploadFinancialStatement(data).then((data) => {
         if (data?.success) {
-          createPDF()
+          createPDF();
           setSuccess(data?.success);
         } else {
           setError(data?.error);
@@ -192,19 +193,24 @@ export default function FinancialStatementForm() {
     });
   };
 
-  const createPDF = async () => {   
-    const pdf = new jsPDF("portrait", "pt", "a4"); 
-    const data = await html2canvas(document.querySelector("#financial_statement")!);
-    const img = data.toDataURL("image/png");  
+  const createPDF = async () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
+    const data = await html2canvas(
+      document.querySelector("#financial_statement")!
+    );
+    const img = data.toDataURL("image/png");
     const imgProperties = pdf.getImageProperties(img);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
     pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("financial_statement.pdf");
-    
+    setIsGeneratingPdf(false);
   };
   return (
-    <div id="financial_statement" className="w-full h-full flex flex-col items-center justify-center">
+    <div
+      id="financial_statement"
+      className="w-full h-full flex flex-col items-center justify-center"
+    >
       {/* Header Start */}
       <div className="flex items-center justify-center mb-6">
         <div className="relative w-20 h-20 mr-3">
@@ -439,9 +445,11 @@ export default function FinancialStatementForm() {
             />
           </Card>
         </div>
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
+        {!isGeneratingPdf && (
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        )}
         <FormError message={error} />
         <FormSuccess message={success} />
         {/* Error Messages */}

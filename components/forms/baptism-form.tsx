@@ -12,6 +12,7 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import PDFSecurity from "jspdf";
 
 const font = Poppins({
   subsets: ["latin"],
@@ -56,7 +57,9 @@ export default function BaptismCertificationForm() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const onSubmit = async (data: FormData) => {
+    setIsGeneratingPdf(true);
     setError("");
     setSuccess("");
     startTransition(() => {
@@ -71,20 +74,25 @@ export default function BaptismCertificationForm() {
     });
   };
 
-  const createPDF = async () => {   
-    const pdf = new jsPDF("portrait", "pt", "a4"); 
+  const createPDF = async () => {
+    const pdf = new jsPDF("portrait", "pt", "a4");
     const data = await html2canvas(document.querySelector("#baptism_pdf")!);
-    const img = data.toDataURL("image/png");  
+    const img = data.toDataURL("image/png");
     const imgProperties = pdf.getImageProperties(img);
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
     pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
+
     pdf.save("baptism.pdf");
-    
+
+    setIsGeneratingPdf(false);
   };
 
   return (
-    <div id="baptism_pdf" className="w-full h-full flex flex-col items-center justify-center">
+    <div
+      id="baptism_pdf"
+      className="w-full h-full flex flex-col items-center justify-center"
+    >
       {/* Header Start */}
       <div className="flex items-center justify-center mb-6">
         <div className="relative w-16 h-16 mr-3">
@@ -344,9 +352,11 @@ export default function BaptismCertificationForm() {
           />
           <p>Pastor in Charge</p>
         </div>
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
+        {!isGeneratingPdf && (
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        )}
         <FormError message={error} />
         <FormSuccess message={success} />
         {/* Error Messages */}

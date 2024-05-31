@@ -38,7 +38,9 @@ export default function CertificationForm() {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const onSubmit = async (data: FormData) => {
+    setIsGeneratingPdf(true)
     setError("");
     setSuccess("");
     startTransition(() => {
@@ -61,6 +63,7 @@ export default function CertificationForm() {
     const pdfHeight = (imgProperties.height * pdfWidth) / imgProperties.width;
     pdf.addImage(img, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("certificate.pdf");
+    setIsGeneratingPdf(false)
     
   };
   return (
@@ -166,9 +169,11 @@ export default function CertificationForm() {
           <p className="font-bold text-xl">REV. ARNEL B. PICAR</p>
           <p>Pastor-in-Charge, UCCP, San Gabriel, LU</p>
         </div>
-        <Button type="submit" className="w-full">
-          Submit
-        </Button>
+        {!isGeneratingPdf && (
+          <Button type="submit" className="w-full">
+            Submit
+          </Button>
+        )}
         <FormError message={error} />
         <FormSuccess message={success} />
         {/* Error Messages */}
