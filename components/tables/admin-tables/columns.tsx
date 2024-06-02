@@ -19,8 +19,12 @@ export const columns: ColumnDef<User>[] = [
     header: "PHONE",
   },
   {
-    accessorKey: "created_at",
+    accessorKey: "createdAt",
     header: "CREATED AT",
+    cell: ({ row }) => {
+      const createdAt = new Date(row.original.createdAt);
+      return <span>{createdAt.toLocaleDateString()}</span>;
+    },
   },
   // {
   //   accessorKey: "role",

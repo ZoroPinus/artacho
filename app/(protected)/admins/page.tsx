@@ -18,6 +18,7 @@ const AdminsPage = () => {
     admin().then((res) => {
       // @ts-ignore
       setMembers(res);
+      console.log(res)
     });
   };
 

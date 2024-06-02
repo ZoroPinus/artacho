@@ -32,6 +32,7 @@ export const RegisterForm = () => {
       email: "",
       password: "",
       name: "",
+      phone: "",
     },
   });
 
@@ -90,6 +91,24 @@ export const RegisterForm = () => {
                       disabled={isPending}
                       placeholder="john.doe@example.com"
                       type="email"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      disabled={isPending}
+                      placeholder="09*********"
                     />
                   </FormControl>
                   <FormMessage />
