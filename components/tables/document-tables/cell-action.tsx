@@ -1,3 +1,5 @@
+"use client";
+import { deleteDocument } from "@/actions/document";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,13 +9,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Document } from "@/constants/data";
 import { Edit, MoreHorizontal, Trash, Download, View } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { deleteDocument } from "@/actions/document";
-import { Document } from "@/constants/data";
-
 interface CellActionProps {
   data: Document;
 }
@@ -50,42 +50,33 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
     }
   };
   
-  const handleView = () => {
-    window.open(data.fileUrl, "_blank");
-  };
 
-  const onDelete = async () => {
+  const handleView =()=>{
+    window.open(data.fileUrl, "_blank");
+  }
+  const onDelete = () => {
     setOpen(true); // open the modal for confirmation
   };
 
-  const onConfirmDelete = async () => {
-    try {
-      setLoading(true);
-      const res = await deleteDocument(data.id);
-      setLoading(false);
-      if (res.success) {
-        toast.success("Document deleted successfully");
-      } else {
-        toast.error("Failed to delete document");
-      }
-      setOpen(false); // close modal after deletion
-    } catch (error) {
-      setLoading(false);
-      toast.error("Failed to delete document");
-      console.error("Error deleting document:", error);
+  const onConfirm = async () => {
+    setLoading(true);
+    const res = await deleteDocument(data.id);
+    setLoading(false);
+    if (res.success) {
+      console.log('Success')
+    } else {
+      console.log('error')
     }
+    setOpen(false); // close modal after deletion
   };
 
   return (
     <>
-      <AlertModal
+    <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onConfirmDelete}
+        onConfirm={onConfirm}
         loading={loading}
-        title="Delete Document"
-        message={`Are you sure you want to delete "${data.name}"?`}
-        confirmText="Delete"
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
@@ -105,7 +96,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem onClick={() => router.push(`/documents/upload`)}>
             <Edit className="mr-2 h-4 w-4" /> Update
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={onDelete}>
+          <DropdownMenuItem onClick={() => onDelete()}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
