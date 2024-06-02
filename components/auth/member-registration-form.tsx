@@ -25,7 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 
 import { useEffect, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch  } from "react-hook-form";
 
 import { MemberRegisterSchema } from "@/schemas";
 import { registerMember } from "@/actions/registerMember";
@@ -106,7 +106,16 @@ export const MemberRegistrationForm = () => {
 
   const selectedProvince = form.watch("province");
   const selectedCity = form.watch("cityState");
-
+  const calculateAge = (dob:any) => {
+    const today = new Date();
+    const birthDate = new Date(dob);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
   useEffect(() => {
     if (selectedProvince) {
       const loadCities = async () => {
@@ -143,6 +152,17 @@ export const MemberRegistrationForm = () => {
     }
   }, [selectedCity]);
 
+
+  const dob = useWatch({ control: form.control, name: "dob" });
+
+  useEffect(() => {
+    if (dob) {
+      const age = calculateAge(dob);
+      form.setValue("age", age);
+    }
+  }, [dob]);
+
+  
   return (
     <>
       <Form {...form}>

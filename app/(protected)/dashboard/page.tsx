@@ -16,6 +16,7 @@ import { User } from "@/types";
 import { Document } from "@/constants/data";
 import { UserRole } from "@prisma/client";
 import { useSession } from "next-auth/react";
+import { split } from "postcss/lib/list";
 const DashboardPage = () => {
   const { data: session } = useSession();
   const router = useRouter();
@@ -104,6 +105,12 @@ const DashboardPage = () => {
   const pdfDocuments = documentData.filter((doc) =>
     doc.fileUrl?.toLowerCase().endsWith(".pdf")
   );
+
+  const getFirstName = (fullName:any) => {
+    if (!fullName) return "";
+    return fullName.split(" ")[0];
+  };
+const firstname = getFirstName(session!.user!.name!);
   return (
     <ScrollArea className="h-full">
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
@@ -111,7 +118,7 @@ const DashboardPage = () => {
           <h2 className="text-3xl font-bold tracking-tight">
             Hi{" "}
             {session!.user!.role! == UserRole.ADMIN
-              ? "Admin!"
+              ? firstname
               : session!.user!.name!}
             , Welcome back 👋
           </h2>

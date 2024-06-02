@@ -165,19 +165,23 @@ export default function FinancialStatementForm() {
         </div>
         {index === offerings[type].length - 1 && (
           <div className="flex flex-row justify-center items-center gap-10 p-2">
-            <button
-              onClick={() => handleAddOfferingInput(type)}
-              className="border border-black rounded-md py-1 px-3 bg-blue-500 text-white font-semibold hover:bg-blue-600"
-            >
-              Add
-            </button>
-            {offerings[type].length > 1 && (
-              <button
-                onClick={() => handleRemoveOfferingInput(type, index)}
-                className="border border-black rounded-md py-1 px-3 bg-red-500 text-white font-semibold hover:bg-red-600"
-              >
-                Remove
-              </button>
+            {!isGeneratingPdf && (
+              <>
+                <button
+                  onClick={() => handleAddOfferingInput(type)}
+                  className="border border-black rounded-md py-1 px-3 bg-blue-500 text-white font-semibold hover:bg-blue-600"
+                >
+                  Add
+                </button>
+                {offerings[type].length > 1 && (
+                  <button
+                    onClick={() => handleRemoveOfferingInput(type, index)}
+                    className="border border-black rounded-md py-1 px-3 bg-red-500 text-white font-semibold hover:bg-red-600"
+                  >
+                    Remove
+                  </button>
+                )}
+              </>
             )}
           </div>
         )}
