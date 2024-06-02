@@ -15,6 +15,7 @@ import { FormError } from "../form-error";
 import { FormSuccess } from "../form-success";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { cn } from "@/lib/utils";
 const font = Poppins({
   subsets: ["latin"],
   weight: ["600"],
@@ -166,22 +167,20 @@ export default function FinancialStatementForm() {
         {index === offerings[type].length - 1 && (
           <div className="flex flex-row justify-center items-center gap-10 p-2">
             {!isGeneratingPdf && (
-              <>
-                <button
-                  onClick={() => handleAddOfferingInput(type)}
-                  className="border border-black rounded-md py-1 px-3 bg-blue-500 text-white font-semibold hover:bg-blue-600"
-                >
-                  Add
-                </button>
-                {offerings[type].length > 1 && (
-                  <button
-                    onClick={() => handleRemoveOfferingInput(type, index)}
-                    className="border border-black rounded-md py-1 px-3 bg-red-500 text-white font-semibold hover:bg-red-600"
-                  >
-                    Remove
-                  </button>
-                )}
-              </>
+              <button
+                onClick={() => handleAddOfferingInput(type)}
+                className="border border-black rounded-md py-1 px-3 bg-blue-500 text-white font-semibold hover:bg-blue-600"
+              >
+                Add
+              </button>
+            )}
+            {!isGeneratingPdf && offerings[type].length > 1 && (
+              <button
+                onClick={() => handleRemoveOfferingInput(type, index)}
+                className="border border-black rounded-md py-1 px-3 bg-red-500 text-white font-semibold hover:bg-red-600"
+              >
+                Remove
+              </button>
             )}
           </div>
         )}
