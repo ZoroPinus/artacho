@@ -1,4 +1,3 @@
-"use client";
 import { AlertModal } from "@/components/modal/alert-modal";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,7 +7,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Edit, MoreHorizontal, Trash, File } from "lucide-react";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { User } from "@/types";
@@ -23,15 +22,20 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
-
-  const onDelete = async () => {
+  const onConfirm = async () => {
+    setLoading(true);
     const res = await deleteUser(data.id);
+    setLoading(false);
     if (res.success) {
       console.log('Success')
     } else {
       console.log('error')
     }
+    setOpen(false); // close modal after deletion
+  };
+
+  const onDelete = () => {
+    setOpen(true); // open the modal for confirmation
   };
 
   return (
@@ -52,7 +56,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           
-          <DropdownMenuItem onClick={() => onDelete()}>
+          <DropdownMenuItem onClick={onDelete}>
             <Trash className="mr-2 h-4 w-4" /> Delete
           </DropdownMenuItem>
         </DropdownMenuContent>
